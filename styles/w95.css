@@ -1,0 +1,147 @@
+/* =============================
+   Windows 95 Inspired Theme
+   Prefix: .w95-
+   ============================= */
+
+.w95-window {
+  position: absolute;
+  background: #d4d0c8;
+  border: 0px solid #fff;
+  box-shadow: inset -1px -1px 0 #000000, inset 1px 1px 0 #ffffff;
+  font-family: 'W95FA';
+}
+
+.w95-window.animated {
+  transition: width 0.1s, height 0.1s, top 0.1s, left 0.1s;
+}
+
+.react-draggable-dragging,
+.react-resizable-resizing {
+  transition: none !important;
+}
+
+.w95-titlebar {
+  margin: 2px;
+  cursor: move;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #000082;
+  color: #fff;
+  padding: 2px 6px;
+  height: 20px;
+  user-select: none;
+  top: 10px;
+}
+
+.w95-titlebar span {
+  flex: 1;
+  text-align: left;
+}
+
+.w95-titlebar .titlebar-buttons {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+}
+
+.w95-minimize,
+.w95-maximize,
+.w95-close {
+  width: 16px;
+  height: 14px;
+  border: 0px solid #fff;
+  background: #c0c0c0;
+  color: black;
+  font-size: 10px;
+  line-height: 10px;
+  padding: 0;
+  box-shadow: inset -1px -1px 0 #000000, inset 1px 1px 0 #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+}
+
+.w95-close:active,
+.w95-maximize:active,
+.w95-minimize:active {
+  box-shadow: inset 1px 1px 0 #404040, inset -1px -1px 0 #fff;
+}
+
+.w95-body {
+  padding: 6px;
+  height: calc(100% - 20px);
+  overflow: auto;
+}
+
+/* === Taskbar === */
+.w95-taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 32px;
+  background: #c3c3c3;
+  border-top: 1px solid #a0a0a0;
+  display: flex;
+  gap: 4px;
+  padding: 0 8px;
+  align-items: center;
+  z-index: 1000;
+  font-family: 'W95FA', 'Tahoma', sans-serif;
+}
+
+/* === Buttons === */
+.w95-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  font-size: 13px;
+  border: 1px solid #808080;
+  background: #c0c0c0;
+  color: black;
+  box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #404040;
+  cursor: default;
+  user-select: none;
+  transition: background 0.1s ease;
+}
+
+.w95-button:hover {
+  background: #dcdcdc;
+}
+
+.w95-button.active {
+  background: #000080;
+  color: white;
+}
+
+.w95-button.minimized {
+  background: #c0c0c0;
+  color: white;
+}
+
+.w95-startmenu {
+  position: absolute;
+  bottom: 40px;
+  left: 6px;
+  width: 240px;
+  background: #ffffff;
+  border: 2px solid #808080;
+  padding: 8px;
+  box-shadow: 2px 2px 0 #404040;
+  font-family: 'W95FA', Tahoma, sans-serif;
+  z-index: 9998;
+}
+
+.w95-startmenu h1 {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.w95-startmenu p {
+  font-size: 11px;
+  color: #333;
+}
