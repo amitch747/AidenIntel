@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 
+.minwindow {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;

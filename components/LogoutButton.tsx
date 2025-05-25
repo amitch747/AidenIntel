@@ -3,6 +3,8 @@
 import { supabase } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 
+const theme = 'w95';
+
 export default function LogoutButton() {
   const router = useRouter();
 
@@ -12,7 +14,7 @@ export default function LogoutButton() {
   }
 
   return (
-    <button onClick={signOut} className="border px-3 py-1 rounded">
+    <button onClick={signOut} className={`${theme}-button`}>
       Sign out
     </button>
   );

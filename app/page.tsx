@@ -1,14 +1,13 @@
-// app/page.tsx
-
 import { ensureProfile } from '@/utils/supabase/server';
-import LogoutButton from '@/components/LogoutButton';
-export default async function DesktopPage() {
+import { redirect } from 'next/navigation';
+import ClientDesktop from '@/components/ClientDesktop';
+
+export default async function Page() {
   const profile = await ensureProfile();
 
-  return (
-    <main>
-      <h1>Welcome, {profile?.displayname ?? 'User'}!</h1>
-      <LogoutButton />
-    </main>
-  );
+  if (!profile) {
+    redirect('/login');
+  }
+
+  return <ClientDesktop profile={profile} />;
 }
