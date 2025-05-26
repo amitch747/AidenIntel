@@ -1,0 +1,16 @@
+Uses TCP, so we have an open and maintained connection between devices
+
+Gotta write this somewhere.
+
+The chat app is a black void. You can join it and if im not there you just sit there as a little icon and talk into nothing
+
+When Im there im at the top middle and i bring light
+
+Then everyone is arrayed in semi circle below and the queue system goes thru
+
+
+Websockets are a browser javascript thing
+
+
+Using supabase for websocket since vercel cant handle it for some reason
+https://supabase.com/docs/guides/realtime
