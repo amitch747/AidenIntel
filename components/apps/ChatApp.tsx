@@ -9,6 +9,11 @@ interface Message {
   timestamp: string;
 }
 
+// Need ability to swap channels (sessions)
+// These sessions will be RTK query
+// So update query right away, then async update db?
+// Pull from db (through query so we cache it) when user clicks new session (or just opens app)
+
 export default function ChatApp() {
   const [messageText, setMessageText] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
