@@ -18,7 +18,12 @@ export default function Taskbar() {
             isOpen ? `${!isMinimized ? 'active' : 'minimized'}` : ''
           }`}
           onClick={() => {
-            isOpen ? dispatch(toggleView(id)) : dispatch(openWindow(id));
+            //isOpen ? dispatch(toggleView(id)) : dispatch(openWindow(id)); NOT ALLOWED. WHY.
+            if (isOpen) {
+              dispatch(toggleView(id));
+            } else {
+              dispatch(openWindow(id));
+            }
           }}
         >
           {appName}
