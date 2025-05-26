@@ -16,8 +16,8 @@ export default function Desktop({ profile }: { profile: Profile }) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(setProfile(profile)); // Set it once at the top level
-  }, [profile]);
+    dispatch(setProfile(profile));
+  }, [profile, dispatch]); // Not sure why I need dispatch in here. Vercel wanted it
 
   return (
     <main className="w95-desktop">

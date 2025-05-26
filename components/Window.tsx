@@ -6,7 +6,7 @@ import SettingsApp from '@/components/apps/SettingsApp';
 import MusicApp from '@/components/apps/MusicApp';
 import { GrClose, GrFormSubtract, GrLayer } from 'react-icons/gr';
 
-import { useAppSelector, useAppDispatch } from '@/state/hooks';
+import { useAppDispatch } from '@/state/hooks';
 import {
   bringToFront,
   updateWindowBounds,

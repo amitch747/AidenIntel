@@ -2,13 +2,13 @@ import ChatApp from './apps/ChatApp';
 import SettingsApp from './apps/SettingsApp';
 import MusicApp from './apps/MusicApp';
 import {
-  GrCli,
+  // GrCli,
   GrContact,
   GrSettingsOption,
-  GrBasket,
-  GrCompliance,
-  GrEdit,
-  GrGamepad,
+  // GrBasket,
+  // GrCompliance,
+  // GrEdit,
+  // GrGamepad,
   GrMusic,
 } from 'react-icons/gr';
 

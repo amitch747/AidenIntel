@@ -3,9 +3,15 @@ import { useEffect, useState } from 'react';
 import { supabase } from '@/utils/supabase/client';
 import { useAppSelector } from '@/state/hooks';
 
+interface Message {
+  content: string;
+  sender: string;
+  timestamp: string;
+}
+
 export default function ChatApp() {
   const [messageText, setMessageText] = useState('');
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const profile = useAppSelector((state) => state.user.profile);
 
   useEffect(() => {
