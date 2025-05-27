@@ -1,14 +1,46 @@
-/* =============================
-   Windows 95 Inspired Theme
-   Prefix: .w95-
-   ============================= */
+.chat-interface {
+  position: fixed;
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.chat-panel {
+  position: relative;
+  min-width: 50%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.sessions-panel {
+  width: 150px; /* Add this - constrain the width */
+  flex-shrink: 0; /* Add this - prevent shrinking */
+  flex-direction: column;
+  overflow-y: auto;
+  background: #d4d0c8;
+  height: 93%;
+}
+
+.session-item {
+  cursor: pointer;
+  padding: 8px;
+  border: 1px solid #808080;
+  background: #c0c0c0;
+  height: 100%;
+}
+
+.session-item.active {
+  background: #000080;
+  color: white;
+}
 
 .w95-desktop {
   position: relative;
   width: 100vw;
   height: 100vh;
-  overflow: hidden;
-  background: #008080; /* Classic teal desktop background */
+  background: #008080;
+  overflow: hidden; /* Add this line to prevent scrolling */
 }
 
 .w95-window {
@@ -17,18 +49,12 @@
   border: 0px solid #fff;
   box-shadow: inset -1px -1px 0 #000000, inset 1px 1px 0 #ffffff;
   font-family: 'W95FA';
-}
-
-.w95-window.animated {
-  transition: width 0.1s, height 0.1s, top 0.1s, left 0.1s;
-}
-
-.react-draggable-dragging,
-.react-resizable-resizing {
-  transition: none !important;
+  display: flex;
+  overflow: hidden;
 }
 
 .w95-titlebar {
+  flex-shrink: 0;
   margin: 2px;
   cursor: move;
   display: flex;
@@ -42,45 +68,28 @@
   top: 10px;
 }
 
-.w95-titlebar span {
-  flex: 1;
-  text-align: left;
-}
-
 .w95-titlebar .titlebar-buttons {
   display: flex;
-  gap: 4px;
-  margin-left: auto;
 }
-
 .w95-minimize,
 .w95-maximize,
 .w95-close {
   width: 16px;
   height: 14px;
-  border: 0px solid #fff;
   background: #c0c0c0;
   color: black;
   font-size: 10px;
-  line-height: 10px;
-  padding: 0;
   box-shadow: inset -1px -1px 0 #000000, inset 1px 1px 0 #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 4px;
+  margin-left: 8px;
 }
 
 .w95-close:active,
 .w95-maximize:active,
 .w95-minimize:active {
   box-shadow: inset 1px 1px 0 #404040, inset -1px -1px 0 #fff;
-}
-
-.w95-body {
-  padding: 6px;
-  height: calc(100% - 20px);
-  overflow: auto;
 }
 
 /* === Taskbar === */
@@ -115,41 +124,14 @@
   user-select: none;
   transition: background 0.1s ease;
 }
-
 .w95-button:hover {
   background: #dcdcdc;
 }
-
 .w95-button.active {
   background: #000080;
   color: white;
 }
-
 .w95-button.minimized {
   background: #c0c0c0;
   color: white;
-}
-
-.w95-startmenu {
-  position: absolute;
-  bottom: 40px;
-  left: 6px;
-  width: 240px;
-  background: #ffffff;
-  border: 2px solid #808080;
-  padding: 8px;
-  box-shadow: 2px 2px 0 #404040;
-  font-family: 'W95FA', Tahoma, sans-serif;
-  z-index: 9998;
-}
-
-.w95-startmenu h1 {
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 4px;
-}
-
-.w95-startmenu p {
-  font-size: 11px;
-  color: #333;
 }

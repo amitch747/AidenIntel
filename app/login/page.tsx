@@ -26,8 +26,13 @@ export default function LoginPage() {
 
   // Sign in with supabase auth then redirect
   async function signIn(provider: Provider) {
-    const base = { redirectTo: `${location.origin}` };
+    console.log('Current URL:', window.location.href);
+    console.log('Origin:', window.location.origin);
 
+    const redirectTo = window.location.origin;
+    console.log('Redirect URL being sent:', redirectTo);
+
+    const base = { redirectTo };
     // Skip the consent page for Discord once the user has approved scopes
     const options =
       provider === 'discord'

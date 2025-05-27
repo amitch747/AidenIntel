@@ -1,6 +1,7 @@
 import { ensureProfile } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
-import ClientDesktop from '@/components/ClientDesktop';
+import ClientApp from '@/components/ClientApp';
+import AdminCenter from '@/components/AdminCenter';
 
 export default async function Page() {
   const profile = await ensureProfile();
@@ -8,6 +9,6 @@ export default async function Page() {
   if (!profile) {
     redirect('/login');
   }
-
-  return <ClientDesktop profile={profile} />;
+  // We access the user differently in many places but ensureProfile gives all the info needed so may as well drill it
+  return <ClientApp profile={profile} />;
 }

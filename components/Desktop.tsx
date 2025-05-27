@@ -12,12 +12,12 @@ type Profile = {
 export default function Desktop({ profile }: { profile: Profile }) {
   const apps = useAppSelector((state) => state.desktop);
   const openApps = apps.filter((app) => app.isOpen);
-
   const dispatch = useAppDispatch();
-
   useEffect(() => {
     dispatch(setProfile(profile));
   }, [profile, dispatch]); // Not sure why I need dispatch in here. Vercel wanted it
+
+  // Now that profile is in the store we can access anywhere, no more drilling ;))))))))))) Unless ur mom shows up
 
   return (
     <main className="w95-desktop">

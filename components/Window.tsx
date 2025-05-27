@@ -2,7 +2,7 @@
 import { Rnd } from 'react-rnd';
 import { WindowState } from '@/state/slices/desktopSlice';
 import ChatApp from '@/components/apps/Chat/ChatApp';
-import SettingsApp from '@/components/apps/SettingsApp';
+import SettingsApp from '@/components/apps/Settings/SettingsApp';
 import MusicApp from '@/components/apps/MusicApp';
 import { GrClose, GrFormSubtract, GrLayer } from 'react-icons/gr';
 
@@ -77,16 +77,13 @@ export default function Window({
           })
         );
       }}
-      className={`${theme}-window ${isMinimized ? 'minwindow' : ''} ${
-        isMaximized ? 'animated' : ''
-      }`}
+      className={`${theme}-window ${isMinimized ? 'minwindow' : ''} `}
     >
       <div className={`${theme}-titlebar`}>
         <span>{title}</span>
         <div className="titlebar-buttons">
           <button
             className={`${theme}-minimize`}
-            title="Minimize"
             onClick={() => {
               dispatch(toggleView(id));
             }}
@@ -95,7 +92,6 @@ export default function Window({
           </button>
           <button
             className={`${theme}-maximize`}
-            title="Maximize"
             onClick={() => {
               dispatch(toggleMax(id));
             }}
@@ -104,7 +100,6 @@ export default function Window({
           </button>
           <button
             className={`${theme}-close`}
-            title="Close"
             onClick={() => {
               dispatch(closeWindow(id));
             }}
@@ -113,9 +108,7 @@ export default function Window({
           </button>
         </div>
       </div>
-      <div className={`${theme}-body`}>
-        <AppComponent />
-      </div>
+      <AppComponent />
     </Rnd>
   );
 }

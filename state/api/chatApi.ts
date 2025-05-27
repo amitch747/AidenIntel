@@ -8,7 +8,7 @@ import { supabase } from '@/utils/supabase/client';
 export interface ChatMessage {
   id: string;
   session_id: string;
-  sender_type: 'user' | 'admin';
+  is_admin: boolean;
   content: string;
   created_at: string;
 }
@@ -18,6 +18,7 @@ export interface ChatSession {
   user_id: string;
   created_at: string;
   last_message_at: string;
+  title: string;
 }
 
 // Custom base query for Supabase
@@ -33,6 +34,18 @@ const supabaseBaseQuery = async ({
   try {
     switch (method) {
       case 'GET':
+        if (url === 'sessions') {
+          const {
+            data: { user },
+          } = await supabase.auth.getUser();
+          const { data: sessions } = await supabase
+            .from('chat_sessions')
+            .select('*')
+            .eq('user_id', user?.id)
+            .order('created_at', { ascending: false });
+          return { data: sessions || [] };
+        }
+
         if (url === 'messages') {
           const {
             data: { user },
@@ -40,24 +53,12 @@ const supabaseBaseQuery = async ({
           } = await supabase.auth.getUser();
           if (!user) throw new Error('No authenticated user');
 
-          // Find user's session
-          const { data: session } = await supabase
-            .from('chat_sessions')
-            .select('id')
-            .eq('user_id', user.id)
-            .order('created_at', { ascending: false })
-            .limit(1)
-            .single();
-
-          if (!session) {
-            return { data: [] }; // No session = no messages
-          }
-
-          // Get messages for this session
+          const sessionId = body;
+          // Get messages for selected session
           const { data: messages, error } = await supabase
             .from('chat_messages')
             .select('*')
-            .eq('session_id', session.id)
+            .eq('session_id', sessionId)
             .order('created_at', { ascending: true });
 
           if (error) throw error;
@@ -66,6 +67,27 @@ const supabaseBaseQuery = async ({
         break;
 
       case 'POST':
+        if (url === 'sessions') {
+          const {
+            data: { user },
+          } = await supabase.auth.getUser();
+
+          if (!user) throw new Error('No authenticated user');
+
+          const { data: newSession, error: sessionError } = await supabase
+            .from('chat_sessions')
+            .insert({
+              user_id: user.id,
+              title: body.title || 'New Chat', // Use provided title or default
+            })
+            .select('*') // Select all fields, not just id
+            .single();
+
+          if (sessionError) throw sessionError;
+
+          return { data: newSession }; // Don't forget to return!
+        }
+
         if (url === 'messages') {
           // Get current user
           const {
@@ -73,32 +95,16 @@ const supabaseBaseQuery = async ({
           } = await supabase.auth.getUser();
           if (!user) throw new Error('No authenticated user');
 
-          // Find or create session
-          let { data: session } = await supabase
-            .from('chat_sessions')
-            .select('id')
-            .eq('user_id', user.id)
-            .single();
-
-          if (!session) {
-            // Create new session
-            const { data: newSession, error: sessionError } = await supabase
-              .from('chat_sessions')
-              .insert({ user_id: user.id })
-              .select('id')
-              .single();
-
-            if (sessionError) throw sessionError;
-            session = newSession;
-          }
-
           // Insert message
+          // content: string;
+          // is_admin: boolean;
+          // sessionId: string;
           const { data: message, error } = await supabase
             .from('chat_messages')
             .insert({
-              session_id: session.id,
-              sender_type: body.sender_type,
               content: body.content,
+              is_admin: body.is_admin,
+              session_id: body.session_id,
             })
             .select()
             .single();
@@ -109,7 +115,7 @@ const supabaseBaseQuery = async ({
           await supabase
             .from('chat_sessions')
             .update({ last_message_at: new Date().toISOString() })
-            .eq('id', session.id);
+            .eq('id', body.session_id);
 
           return { data: message };
         }
@@ -128,28 +134,25 @@ const supabaseBaseQuery = async ({
   }
 };
 
-// Create the API slice
 export const chatApi = createApi({
   reducerPath: 'chatApi',
   baseQuery: supabaseBaseQuery,
-  tagTypes: ['Messages'],
+  tagTypes: ['Messages', 'Sessions'],
   endpoints: (builder) => ({
-    // Get messages for current user's session
-    getMessages: builder.query<ChatMessage[], void>({
-      query: () => ({
+    getMessages: builder.query<ChatMessage[], string>({
+      query: (sessionId) => ({
         url: 'messages',
         method: 'GET',
+        body: sessionId,
       }),
-      // GET query updates messages cache if invalidated by POST
       providesTags: ['Messages'],
     }),
-
-    // Send a new message
     sendMessage: builder.mutation<
       ChatMessage,
       {
         content: string;
-        sender_type: 'user' | 'admin';
+        is_admin: boolean;
+        session_id: string;
       }
     >({
       query: (messageData) => ({
@@ -160,8 +163,24 @@ export const chatApi = createApi({
       // POST query provides info to tag and invalidates cache
       invalidatesTags: ['Messages'],
     }),
+    getSessions: builder.query<ChatSession[], void>({
+      query: () => ({ url: 'sessions', method: 'GET' }),
+      providesTags: ['Sessions'],
+    }),
+    createSession: builder.mutation<ChatSession, { title: string }>({
+      query: (sessionData) => ({
+        url: 'sessions',
+        method: 'POST',
+        body: sessionData,
+      }),
+      invalidatesTags: ['Sessions'],
+    }),
   }),
 });
 
-// Export hooks for usage in functional components
-export const { useGetMessagesQuery, useSendMessageMutation } = chatApi;
+export const {
+  useGetSessionsQuery,
+  useCreateSessionMutation,
+  useGetMessagesQuery,
+  useSendMessageMutation,
+} = chatApi;

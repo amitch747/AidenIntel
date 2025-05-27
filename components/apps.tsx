@@ -1,5 +1,5 @@
 import ChatApp from './apps/Chat/ChatApp';
-import SettingsApp from './apps/SettingsApp';
+import SettingsApp from './apps/Settings/SettingsApp';
 import MusicApp from './apps/MusicApp';
 import {
   // GrCli,
@@ -19,7 +19,7 @@ export const APP_REGISTRY = [
     icon: GrContact,
     component: ChatApp,
     defaultPos: { x: 400, y: 175 },
-    minDim: { x: 200, y: 150 },
+    minDim: { x: 300, y: 150 },
   },
   {
     id: 'settings',
