@@ -1,7 +1,7 @@
 'use client';
 import { Rnd } from 'react-rnd';
 import { WindowState } from '@/state/slices/desktopSlice';
-import ChatApp from '@/components/apps/ChatApp';
+import ChatApp from '@/components/apps/Chat/ChatApp';
 import SettingsApp from '@/components/apps/SettingsApp';
 import MusicApp from '@/components/apps/MusicApp';
 import { GrClose, GrFormSubtract, GrLayer } from 'react-icons/gr';

@@ -1,5 +1,13 @@
 @import 'tailwindcss';
 
+@font-face {
+  font-family: 'W95FA';
+  src: url('/fonts/W95FA.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 .minwindow {
   visibility: hidden;
   pointer-events: none;

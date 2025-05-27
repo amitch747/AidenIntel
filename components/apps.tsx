@@ -1,4 +1,4 @@
-import ChatApp from './apps/ChatApp';
+import ChatApp from './apps/Chat/ChatApp';
 import SettingsApp from './apps/SettingsApp';
 import MusicApp from './apps/MusicApp';
 import {
