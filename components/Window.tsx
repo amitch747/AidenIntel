@@ -5,8 +5,8 @@ import ChatApp from '@/components/apps/Chat/ChatApp';
 import SettingsApp from '@/components/apps/Settings/SettingsApp';
 import MusicApp from '@/components/apps/MusicApp';
 import { GrClose, GrFormSubtract, GrLayer } from 'react-icons/gr';
-
-import { useAppDispatch } from '@/state/hooks';
+import { useAppDispatch, useAppSelector } from '@/state/hooks';
+import { supabase } from '@/utils/supabase/client';
 import {
   bringToFront,
   updateWindowBounds,
@@ -35,7 +35,25 @@ export default function Window({
 }: WindowState) {
   const AppComponent = APP_COMPONENTS[appName as keyof typeof APP_COMPONENTS];
   const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.user);
+  const profile = user.profile;
 
+  const broadcastPosition = (
+    position: { x: number; y: number; w?: number; h?: number }
+    //size?: { width: number; height: number }
+  ) => {
+    if (profile?.id) {
+      supabase.channel(`user-${profile.id}`).send({
+        type: 'broadcast',
+        event: 'window-live-update',
+        payload: {
+          windowId: id,
+          position,
+          timestamp: Date.now(),
+        },
+      });
+    }
+  };
   return (
     <Rnd
       position={isMaximized ? { x: 0, y: 0 } : { x, y }}
@@ -63,17 +81,39 @@ export default function Window({
         dispatch(
           updateWindowBounds({
             id,
-            position: { x: d.x, y: d.y },
+            position: {
+              x: d.x,
+              y: d.y,
+            },
           })
         );
       }}
-      // no idea about some of these. should look into more
+      onResize={(e, dir, ref, delta, pos) => {
+        // Broadcast every resize movement
+        broadcastPosition({
+          x: pos.x,
+          y: pos.y,
+          w: ref.offsetWidth,
+          h: ref.offsetHeight,
+        });
+      }}
+      onDrag={(e, d) => {
+        // Broadcast every resize movement
+        broadcastPosition({
+          x: d.x,
+          y: d.y,
+        });
+      }}
       onResizeStop={(e, dir, ref, delta, pos) => {
         dispatch(
           updateWindowBounds({
             id,
-            position: { x: pos.x, y: pos.y },
-            size: { w: ref.offsetWidth, h: ref.offsetHeight },
+            position: {
+              x: pos.x,
+              y: pos.y,
+              w: ref.offsetWidth,
+              h: ref.offsetHeight,
+            },
           })
         );
       }}

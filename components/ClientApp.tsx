@@ -17,7 +17,7 @@ export default function ClientApp({ profile }: { profile: Profile }) {
   // Only subscribe if not admin, admin will sub within admincenter
 
   useEffect(() => {
-    if (!profile.is_admin) return;
+    if (profile.is_admin) return;
     const presenceRoom = supabase.channel('presence');
 
     presenceRoom.subscribe(async (status) => {

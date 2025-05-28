@@ -1,63 +1,68 @@
 'use client';
+import { useEffect } from 'react';
+import { ChatMessage } from '@/state/slices/chatSlice';
+import { useAppSelector, useAppDispatch } from '@/state/hooks';
 import {
-  useGetMessagesQuery,
-  useSendMessageMutation,
-} from '@/state/api/chatApi';
-import { ChatMessage } from '@/state/api/chatApi';
-import { useState } from 'react';
+  updateUserInput,
+  fetchMessages,
+  postMessage,
+} from '@/state/slices/chatSlice';
 
-interface ChatProps {
-  session_id: string;
-}
+export default function Chat() {
+  const dispatch = useAppDispatch();
+  const { currentSessionId, chatLoading, messages, userInput, isSending } =
+    useAppSelector((state) => state.chat);
 
-export default function Chat({ session_id }: ChatProps) {
-  const [messageText, setMessageText] = useState('');
-  const { data: messages = [], isLoading } = useGetMessagesQuery(session_id, {
-    skip: !session_id, // Skip query if no sessionId
-  });
-  const [sendMessage, { isLoading: isSending }] = useSendMessageMutation();
+  useEffect(() => {
+    if (currentSessionId && !messages[currentSessionId]) {
+      dispatch(fetchMessages(currentSessionId));
+    }
+  }, [currentSessionId, messages, dispatch]);
+  const currentMessages = messages[currentSessionId] || [];
 
-  if (!session_id) {
+  if (!currentSessionId) {
     return <div>Select a chat session to start messaging</div>;
   }
-
-  if (isLoading) {
+  if (chatLoading) {
     return <div>Loading messages</div>;
   }
 
   const handleSend = async () => {
-    if (!messageText.trim()) return;
-    // send message logic
+    if (!userInput.trim()) return;
     try {
-      await sendMessage({
-        content: messageText,
-        is_admin: false, // User sending message
-        session_id: session_id, // You might need to modify your mutation to accept this
-      }).unwrap();
-
-      setMessageText(''); // Clear input on success
+      await dispatch(
+        postMessage({
+          sessionId: currentSessionId,
+          message: userInput,
+          isAdmin: false,
+        })
+      ).unwrap();
     } catch (error) {
       console.error('Failed to send message:', error);
     }
   };
 
   return (
-    <div>
-      <div className="grid grid-cols-2 gap-4">
-        {messages.map((message: ChatMessage) => (
-          <div key={message.id} className="p-2">
-            {message.content}
-          </div>
-        ))}
+    <div className="flex flex-col h-full">
+      <div className="flex-1 overflow-y-auto">
+        <div className="grid grid-cols-1 gap-4 p-4">
+          {currentMessages.map((message: ChatMessage) => (
+            <div key={message.id} className="p-2">
+              {message.content}
+            </div>
+          ))}
+        </div>
       </div>
-      <div>
+
+      <div className="flex gap-2 p-4 border-t bg-[#c0c0c0]">
         <input
           type="text"
-          value={messageText}
-          onChange={(e) => setMessageText(e.target.value)}
+          value={userInput}
+          onChange={(e) => dispatch(updateUserInput(e.target.value))}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
           placeholder="Say something..."
           disabled={isSending}
+          className="w95-input flex-1"
         />
         <button
           onClick={handleSend}

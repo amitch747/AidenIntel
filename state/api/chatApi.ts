@@ -120,6 +120,48 @@ const supabaseBaseQuery = async ({
           return { data: message };
         }
         break;
+      case 'PATCH':
+        if (url === 'sessions') {
+          const {
+            data: { user },
+          } = await supabase.auth.getUser();
+          if (!user) throw new Error('No authenticated user');
+
+          const { id, title } = body;
+          console.log('PATCH /sessions body:', body);
+
+          const { data: updatedSession, error: updateError } = await supabase
+            .from('chat_sessions')
+            .update({ title })
+            .eq('id', id)
+            .select('*') // return the updated row
+            .single();
+
+          if (updateError) throw updateError;
+
+          return { data: updatedSession };
+        }
+        break;
+
+      case 'DELETE':
+        if (url === 'sessions') {
+          const {
+            data: { user },
+          } = await supabase.auth.getUser();
+          if (!user) throw new Error('No authenticated user');
+
+          const { id } = body;
+          console.log(`deleting ${id}`);
+          const { error } = await supabase
+            .from('chat_sessions')
+            .delete()
+            .eq('id', id);
+
+          if (error) throw error;
+
+          return { data: null };
+        }
+        break;
     }
 
     throw new Error(`Unhandled request: ${method} ${url}`);
@@ -163,6 +205,7 @@ export const chatApi = createApi({
       // POST query provides info to tag and invalidates cache
       invalidatesTags: ['Messages'],
     }),
+
     getSessions: builder.query<ChatSession[], void>({
       query: () => ({ url: 'sessions', method: 'GET' }),
       providesTags: ['Sessions'],
@@ -175,6 +218,24 @@ export const chatApi = createApi({
       }),
       invalidatesTags: ['Sessions'],
     }),
+    updateSession: builder.mutation<ChatSession, { id: string; title: string }>(
+      {
+        query: (sessionData) => ({
+          url: 'sessions',
+          method: 'PATCH',
+          body: sessionData,
+        }),
+        invalidatesTags: ['Sessions'],
+      }
+    ),
+    deleteSession: builder.mutation<void, { id: string }>({
+      query: (sessionData) => ({
+        url: 'sessions',
+        method: 'DELETE',
+        body: sessionData,
+      }),
+      invalidatesTags: ['Sessions'],
+    }),
   }),
 });
 
@@ -183,4 +244,6 @@ export const {
   useCreateSessionMutation,
   useGetMessagesQuery,
   useSendMessageMutation,
+  useUpdateSessionMutation,
+  useDeleteSessionMutation,
 } = chatApi;

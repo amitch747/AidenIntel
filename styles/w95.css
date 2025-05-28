@@ -1,44 +1,79 @@
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+  background: #c0c0c0;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #808080;
+  border: 2px solid #c0c0c0;
+  box-shadow: inset -1px -1px 0 #000, inset 1px 1px 0 #fff;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}
+
+::-webkit-scrollbar-corner {
+  background: #c0c0c0;
+}
+
 .chat-interface {
-  position: fixed;
   display: flex;
+  flex-direction: row;
   height: 100%;
   width: 100%;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .chat-panel {
-  position: relative;
-  min-width: 50%;
   flex: 1;
+  min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
-
 .sessions-panel {
-  width: 150px; /* Add this - constrain the width */
-  flex-shrink: 0; /* Add this - prevent shrinking */
-  flex-direction: column;
+  width: 145px;
+  flex-shrink: 0;
+  height: 100%;
   overflow-y: auto;
   background: #d4d0c8;
-  height: 93%;
+  display: flex;
+  flex-direction: column;
 }
 
 .session-item {
   cursor: pointer;
-  padding: 8px;
+  padding: 4px 6px;
   border: 1px solid #808080;
   background: #c0c0c0;
-  height: 100%;
+  line-height: 1.2;
+  margin-bottom: 4px;
 }
 
 .session-item.active {
-  background: #000080;
+  background: #050598;
+  color: white;
+}
+
+.session-item.deleted {
+  background: #c70909;
+  color: white;
+}
+
+.session-item.editing {
+  background: #e0aa08;
   color: white;
 }
 
 .w95-desktop {
   position: relative;
+
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 32px); /* 32px is taskbar height */
   background: #008080;
   overflow: hidden; /* Add this line to prevent scrolling */
 }
@@ -105,7 +140,7 @@
   gap: 4px;
   padding: 0 8px;
   align-items: center;
-  z-index: 1000;
+  z-index: 9998;
   font-family: 'W95FA', 'Tahoma', sans-serif;
 }
 
@@ -134,4 +169,22 @@
 .w95-button.minimized {
   background: #c0c0c0;
   color: white;
+}
+
+.w95-input {
+  border-radius: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 3px 4px;
+  font-family: 'W95FA';
+  font-size: 13px;
+  border: inset 2px;
+  background: white;
+  color: black;
+  cursor: text;
+  width: 100%;
+}
+
+.w95-input:focus {
+  outline: none;
 }

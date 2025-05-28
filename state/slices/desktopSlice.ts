@@ -122,8 +122,7 @@ const desktopSlice = createSlice({
       state,
       action: PayloadAction<{
         id: string;
-        position?: { x: number; y: number };
-        size?: { w: number; h: number };
+        position?: { x: number; y: number; w?: number; h?: number };
       }>
     ) => {
       const window = state.find((w) => w.id === action.payload.id);
@@ -131,10 +130,12 @@ const desktopSlice = createSlice({
         if (action.payload.position) {
           window.position.x = action.payload.position.x;
           window.position.y = action.payload.position.y;
-        }
-        if (action.payload.size) {
-          window.position.w = action.payload.size.w;
-          window.position.h = action.payload.size.h;
+          if (action.payload.position.w !== undefined) {
+            window.position.w = action.payload.position.w;
+          }
+          if (action.payload.position.h !== undefined) {
+            window.position.h = action.payload.position.h;
+          }
         }
       }
     },

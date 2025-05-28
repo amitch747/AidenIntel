@@ -48,11 +48,7 @@ export default function LoginPage() {
         <h1 className="text-center mb-4 text-lg">AidenIntelligence</h1>
 
         {providers.map(({ id, label, Icon }) => (
-          <button
-            key={id}
-            onClick={() => signIn(id)}
-            className="w95-button w-full mb-2 justify-center"
-          >
+          <button key={id} onClick={() => signIn(id)} className="w95-button">
             <Icon size={16} />
             Log in with {label}
           </button>
