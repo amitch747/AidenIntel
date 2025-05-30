@@ -1,23 +1,38 @@
 'use client';
 import { useEffect } from 'react';
 import { ChatMessage } from '@/state/slices/chatSlice';
-import { useAppSelector, useAppDispatch } from '@/state/hooks';
+import { useAppDispatch } from '@/state/hooks';
 import {
   updateUserInput,
   fetchMessages,
   postMessage,
 } from '@/state/slices/chatSlice';
 
-export default function Chat() {
+interface ChatProps {
+  currentSessionId: string;
+  messages: { [sessionId: string]: ChatMessage[] };
+  userInput: string;
+  chatLoading: boolean;
+  isSending: boolean;
+  isAdminView: boolean;
+}
+
+export default function Chat({
+  currentSessionId,
+  messages,
+  userInput,
+  chatLoading,
+  isSending,
+  isAdminView,
+}: ChatProps) {
   const dispatch = useAppDispatch();
-  const { currentSessionId, chatLoading, messages, userInput, isSending } =
-    useAppSelector((state) => state.chat);
 
   useEffect(() => {
-    if (currentSessionId && !messages[currentSessionId]) {
+    if (!isAdminView && currentSessionId && !messages[currentSessionId]) {
       dispatch(fetchMessages(currentSessionId));
     }
-  }, [currentSessionId, messages, dispatch]);
+  }, [currentSessionId, messages, dispatch, isAdminView]);
+
   const currentMessages = messages[currentSessionId] || [];
 
   if (!currentSessionId) {
@@ -28,7 +43,8 @@ export default function Chat() {
   }
 
   const handleSend = async () => {
-    if (!userInput.trim()) return;
+    if (isAdminView || !userInput.trim()) return;
+
     try {
       await dispatch(
         postMessage({
@@ -39,6 +55,12 @@ export default function Chat() {
       ).unwrap();
     } catch (error) {
       console.error('Failed to send message:', error);
+    }
+  };
+
+  const handleInputChange = (value: string) => {
+    if (!isAdminView) {
+      dispatch(updateUserInput(value));
     }
   };
 
@@ -58,15 +80,15 @@ export default function Chat() {
         <input
           type="text"
           value={userInput}
-          onChange={(e) => dispatch(updateUserInput(e.target.value))}
+          onChange={(e) => handleInputChange(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
           placeholder="Say something..."
-          disabled={isSending}
-          className="w95-input flex-1"
+          disabled={isSending || isAdminView}
+          className={`w95-input flex-1 ${isAdminView ? 'admin-readonly' : ''}`}
         />
         <button
           onClick={handleSend}
-          disabled={isSending}
+          disabled={isSending || isAdminView}
           className="w95-button"
         >
           {isSending ? 'Sending...' : 'Send'}

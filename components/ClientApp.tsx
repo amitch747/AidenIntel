@@ -18,10 +18,16 @@ export default function ClientApp({ profile }: { profile: Profile }) {
 
   useEffect(() => {
     if (profile.is_admin) return;
+
+    console.log('🟢 User joining presence channel:', profile.displayname);
     const presenceRoom = supabase.channel('presence');
 
     presenceRoom.subscribe(async (status) => {
       if (status === 'SUBSCRIBED') {
+        console.log(
+          '✅ User presence subscribed, tracking presence for:',
+          profile.displayname
+        );
         await presenceRoom.track({
           user_id: profile.id,
           displayname: profile.displayname,
@@ -31,11 +37,11 @@ export default function ClientApp({ profile }: { profile: Profile }) {
       }
     });
 
-    // even if browser crashes, supabase will handle unsubbing
     return () => {
+      console.log('❌ User leaving presence channel:', profile.displayname);
       presenceRoom.unsubscribe();
     };
-  }, [profile]); // Re-run if profile changes
+  }, [profile]);
 
   return (
     <Provider store={store}>

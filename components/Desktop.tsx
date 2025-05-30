@@ -6,6 +6,18 @@ import { useEffect } from 'react';
 import { setProfile } from '@/state/slices/userSlice';
 import { supabase } from '@/utils/supabase/client';
 import { UUID } from 'crypto';
+import {
+  setCurrentSession,
+  postMessage,
+  createSession,
+  deleteSession,
+  updateUserInput,
+} from '@/state/slices/chatSlice';
+import {
+  openWindow,
+  closeWindow,
+  updateWindowBounds,
+} from '@/state/slices/desktopSlice';
 
 type Profile = {
   id: UUID;
@@ -19,12 +31,11 @@ export default function Desktop({ profile }: { profile: Profile }) {
   const chatState = useAppSelector((state) => state.chat);
   const openApps = apps.filter((app) => app.isOpen);
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     dispatch(setProfile(profile));
-  }, [profile, dispatch]); // Not sure why I need dispatch in here. Vercel wanted it
-  // Now that profile is in the store we can access anywhere, no more drilling ;))))))))))) Unless ur mom shows up
+  }, [profile, dispatch]);
 
-  // In Desktop.tsx - replace both useEffects with this single one:
   useEffect(() => {
     const userChannel = supabase.channel(`user-${profile.id}`);
 
@@ -41,14 +52,81 @@ export default function Desktop({ profile }: { profile: Profile }) {
           },
         });
       })
+      .on('broadcast', { event: 'admin-control' }, async (payload) => {
+        const { command, data } = payload.payload;
+        console.log('🎮 User received admin command:', command, data);
+
+        // Execute the admin's command
+        switch (command) {
+          case 'SELECT_SESSION':
+            dispatch(setCurrentSession(data.sessionId));
+            break;
+
+          case 'SEND_MESSAGE':
+            try {
+              await dispatch(
+                postMessage({
+                  sessionId: data.sessionId,
+                  message: data.message,
+                  isAdmin: true, // Mark as admin message
+                })
+              ).unwrap();
+            } catch (error) {
+              console.error('Failed to send admin message:', error);
+            }
+            break;
+
+          case 'CREATE_SESSION':
+            try {
+              const result = await dispatch(createSession()).unwrap();
+              dispatch(setCurrentSession(result.id));
+            } catch (error) {
+              console.error('Failed to create session:', error);
+            }
+            break;
+
+          case 'DELETE_SESSION':
+            try {
+              await dispatch(deleteSession(data.sessionId)).unwrap();
+            } catch (error) {
+              console.error('Failed to delete session:', error);
+            }
+            break;
+
+          case 'UPDATE_USER_INPUT':
+            dispatch(updateUserInput(data.input));
+            break;
+
+          case 'MOVE_WINDOW':
+            dispatch(
+              updateWindowBounds({
+                id: data.windowId,
+                position: { x: data.x, y: data.y },
+              })
+            );
+            break;
+
+          case 'OPEN_APP':
+            dispatch(openWindow(data.windowId));
+            break;
+
+          case 'CLOSE_APP':
+            dispatch(closeWindow(data.windowId));
+            break;
+
+          default:
+            console.log('Unknown admin command:', command);
+        }
+      })
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
-          // Also send state when user channel first connects
+          // Send state when user channel first connects
           await userChannel.send({
             type: 'broadcast',
             event: 'desktop-state',
             payload: {
               windows: apps,
+              chat: chatState,
               userId: profile.id,
             },
           });
@@ -58,7 +136,7 @@ export default function Desktop({ profile }: { profile: Profile }) {
     return () => {
       userChannel.unsubscribe();
     };
-  }, [apps, chatState, profile.id]);
+  }, [apps, chatState, profile.id, dispatch]);
 
   return (
     <main className="w95-desktop">

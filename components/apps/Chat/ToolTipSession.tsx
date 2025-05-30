@@ -1,8 +1,7 @@
 'use client';
-
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { useAppSelector, useAppDispatch } from '@/state/hooks';
+import { useAppDispatch } from '@/state/hooks';
 import {
   deleteSession,
   renameSession,
@@ -14,24 +13,24 @@ import {
 interface ToolTipSessionProps {
   left: number;
   top: number;
+  renameId: string;
+  renameInput: string;
+  isRenaming: boolean;
   setClickPos: React.Dispatch<
     React.SetStateAction<{ x: number; y: number } | null>
   >;
 }
-
 export default function ToolTipSession({
   top,
   left,
+  renameId,
+  renameInput,
+  isRenaming,
   setClickPos,
 }: ToolTipSessionProps) {
   const dispatch = useAppDispatch();
-  const { renameId, renameInput, isRenaming } = useAppSelector(
-    (state) => state.chat
-  );
-  console.log('rename id', renameId);
   const ref = useRef<HTMLDivElement | null>(null);
 
-  // Auto-close if clicking outside tooltip
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) {
@@ -42,9 +41,8 @@ export default function ToolTipSession({
     };
 
     document.addEventListener('mousedown', handleClickOutside);
-    // Remove listener when ToolTipSession unmounts
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [setClickPos]);
+  }, [setClickPos, dispatch]);
 
   const handleRenameSubmit = async () => {
     if (!renameInput.trim()) return;
@@ -55,7 +53,7 @@ export default function ToolTipSession({
       ).unwrap();
       dispatch(setIsRenaming(false));
       dispatch(updateRenameInput(''));
-      setClickPos(null); // close the tooltip after successful rename
+      setClickPos(null);
       dispatch(setRenameId(''));
     } catch (error) {
       console.error('Failed to update session:', error);
@@ -64,7 +62,6 @@ export default function ToolTipSession({
 
   const handleDelete = async () => {
     try {
-      // unwrap is NEEDED
       await dispatch(deleteSession(renameId)).unwrap();
       setClickPos(null);
     } catch (error) {

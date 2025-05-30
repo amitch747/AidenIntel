@@ -5,13 +5,14 @@
 - ~~Rename live update~~
 - Total fresh css and tailwind
 - Rework virtual desktop to be a window
+- Remove live feed update
 
 ## Backend
 
 - ~~Delete sessions~~
 - Go through the db and figure out how it all works
-- Total code review. Comments, fixes, etc
-- Websocket parasite, view users desktop, control things
+- Total code review. Comments, fixes, etc. Draw out (maybe software) the architecture
+- ~~Websocket parasite, view users desktop, control things~~
 
 ## Security
 
