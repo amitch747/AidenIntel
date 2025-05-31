@@ -1,13 +1,35 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
+import { Profile } from '@/components/ClientApp';
+import { supabase } from '@/utils/supabase/client';
 
-interface UserState {
-  profile: {
-    id: string;
-    displayname?: string;
-    theme: string;
-    is_admin: boolean;
-  } | null;
+export interface UserState {
+  profile: Profile | null;
+  updating: boolean;
 }
+
+export const changeTheme = createAsyncThunk(
+  'user/changeTheme',
+  async ({ id, theme }: { id: string; theme: string }) => {
+    const { error } = await supabase
+      .from('profiles')
+      .update({ theme })
+      .eq('id', id);
+    if (error) throw error;
+    return theme;
+  }
+);
+
+export const changeName = createAsyncThunk(
+  'user/changeName',
+  async ({ id, displayname }: { id: string; displayname: string }) => {
+    const { error } = await supabase
+      .from('profiles')
+      .update({ displayname })
+      .eq('id', id);
+    if (error) throw error;
+    return displayname;
+  }
+);
 
 const userSlice = createSlice({
   name: 'user',
@@ -17,6 +39,30 @@ const userSlice = createSlice({
       // Very simple, i just need to dispatch in root page
       state.profile = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(changeTheme.pending, (state) => {
+        if (state.profile) {
+        }
+      })
+      .addCase(changeTheme.fulfilled, (state, action) => {
+        if (state.profile) {
+          state.profile.theme = action.payload;
+          state.updating = false;
+        }
+      })
+      .addCase(changeName.pending, (state) => {
+        if (state.profile) {
+          state.updating = true;
+        }
+      })
+      .addCase(changeName.fulfilled, (state, action) => {
+        if (state.profile) {
+          state.profile.displayname = action.payload;
+          state.updating = false;
+        }
+      });
   },
 });
 

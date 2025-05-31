@@ -1,7 +1,6 @@
 import { ensureProfile } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import ClientApp from '@/components/ClientApp';
-import AdminCenter from '@/components/AdminCenter';
 
 export default async function Page() {
   const profile = await ensureProfile();

@@ -1,81 +1,66 @@
 'use client';
+
 import TaskBar from '@/components/Taskbar';
 import { useAppSelector, useAppDispatch } from '@/state/hooks';
 import Window from './Window';
 import { useEffect } from 'react';
 import { setProfile } from '@/state/slices/userSlice';
 import { supabase } from '@/utils/supabase/client';
-import { UUID } from 'crypto';
+import { Profile } from './ClientApp';
 import {
   setCurrentSession,
   postMessage,
   createSession,
   deleteSession,
   updateUserInput,
+  renameSession,
 } from '@/state/slices/chatSlice';
 import {
   openWindow,
   closeWindow,
   updateWindowBounds,
+  toggleMax,
+  toggleView,
 } from '@/state/slices/desktopSlice';
 
-type Profile = {
-  id: UUID;
-  theme: string;
-  displayname: string;
-  is_admin: boolean;
-};
-
 export default function Desktop({ profile }: { profile: Profile }) {
-  const apps = useAppSelector((state) => state.desktop);
+  // Get state for broadcasts
+  const desktopState = useAppSelector((state) => state.desktop);
   const chatState = useAppSelector((state) => state.chat);
-  const openApps = apps.filter((app) => app.isOpen);
+  const userState = useAppSelector((state) => state.user);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    // Finally set profile in store so the drilling may end
     dispatch(setProfile(profile));
   }, [profile, dispatch]);
 
   useEffect(() => {
-    const userChannel = supabase.channel(`user-${profile.id}`);
+    // Set up unique user channel
+    const userChannel = supabase.channel(`user-${userState.profile?.id}`);
 
     userChannel
       .on('broadcast', { event: 'admin-request-state' }, async () => {
-        // Send current state when admin requests it
+        // Send state when admin requests it
         await userChannel.send({
           type: 'broadcast',
           event: 'desktop-state',
           payload: {
-            windows: apps,
+            windows: desktopState,
             chat: chatState,
-            userId: profile.id,
+            user: userState,
           },
         });
       })
       .on('broadcast', { event: 'admin-control' }, async (payload) => {
+        // Respond to admin broadcasts
         const { command, data } = payload.payload;
-        console.log('🎮 User received admin command:', command, data);
 
-        // Execute the admin's command
         switch (command) {
           case 'SELECT_SESSION':
             dispatch(setCurrentSession(data.sessionId));
             break;
-
-          case 'SEND_MESSAGE':
-            try {
-              await dispatch(
-                postMessage({
-                  sessionId: data.sessionId,
-                  message: data.message,
-                  isAdmin: true, // Mark as admin message
-                })
-              ).unwrap();
-            } catch (error) {
-              console.error('Failed to send admin message:', error);
-            }
-            break;
-
           case 'CREATE_SESSION':
             try {
               const result = await dispatch(createSession()).unwrap();
@@ -84,7 +69,6 @@ export default function Desktop({ profile }: { profile: Profile }) {
               console.error('Failed to create session:', error);
             }
             break;
-
           case 'DELETE_SESSION':
             try {
               await dispatch(deleteSession(data.sessionId)).unwrap();
@@ -92,18 +76,61 @@ export default function Desktop({ profile }: { profile: Profile }) {
               console.error('Failed to delete session:', error);
             }
             break;
-
-          case 'UPDATE_USER_INPUT':
-            dispatch(updateUserInput(data.input));
+          case 'RENAME_SESSION':
+            try {
+              await dispatch(
+                renameSession({
+                  id: data.sessionId,
+                  title: data.name,
+                })
+              ).unwrap();
+            } catch (error) {
+              console.error('Failed to rename session:', error);
+            }
             break;
-
-          case 'MOVE_WINDOW':
+          case 'UPDATE_WINDOW_BOUNDS':
             dispatch(
               updateWindowBounds({
                 id: data.windowId,
-                position: { x: data.x, y: data.y },
+                position: {
+                  x: data.x,
+                  y: data.y,
+                  w: data.w,
+                  h: data.h,
+                },
               })
             );
+            await userChannel.send({
+              type: 'broadcast',
+              event: 'window-live-update',
+              payload: {
+                windowId: data.windowId,
+                position: {
+                  x: data.x,
+                  y: data.y,
+                  w: data.w,
+                  h: data.h,
+                },
+                timestamp: Date.now(),
+              },
+            });
+            break;
+          case 'SEND_MESSAGE':
+            try {
+              await dispatch(
+                postMessage({
+                  sessionId: data.sessionId,
+                  message: data.message,
+                  isAdmin: true,
+                })
+              ).unwrap();
+            } catch (error) {
+              console.error('Failed to send admin message:', error);
+            }
+            break;
+
+          case 'UPDATE_USER_INPUT':
+            dispatch(updateUserInput(data.input));
             break;
 
           case 'OPEN_APP':
@@ -113,37 +140,44 @@ export default function Desktop({ profile }: { profile: Profile }) {
           case 'CLOSE_APP':
             dispatch(closeWindow(data.windowId));
             break;
-
-          default:
-            console.log('Unknown admin command:', command);
+          case 'MIN_APP':
+            dispatch(toggleView(data.windowId));
+            break;
+          case 'MAX_APP':
+            dispatch(toggleMax(data.windowId));
+            break;
         }
       })
       .subscribe(async (status) => {
+        // Also send state when admin subscribes (maybe not needed)
         if (status === 'SUBSCRIBED') {
-          // Send state when user channel first connects
           await userChannel.send({
             type: 'broadcast',
             event: 'desktop-state',
             payload: {
-              windows: apps,
+              windows: desktopState,
               chat: chatState,
-              userId: profile.id,
+              user: userState,
             },
           });
         }
       });
 
     return () => {
+      // Unsub when component dismounts
       userChannel.unsubscribe();
     };
-  }, [apps, chatState, profile.id, dispatch]);
+  }, [desktopState, chatState, userState, dispatch]);
 
+  const openApps = desktopState.filter((app) => app.isOpen);
   return (
-    <main className="w95-desktop">
-      {openApps.map((app) => (
-        <Window key={app.id} {...app} />
-      ))}
+    <>
+      <main className="w95-desktop">
+        {openApps.map((app) => (
+          <Window key={app.id} {...app} />
+        ))}
+      </main>
       <TaskBar />
-    </main>
+    </>
   );
 }

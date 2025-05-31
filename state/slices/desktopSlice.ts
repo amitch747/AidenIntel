@@ -33,7 +33,7 @@ const initialState: WindowState[] = [
       w: 200,
       h: 150,
     },
-    minDim: { xM: 200, yM: 150 },
+    minDim: { xM: 500, yM: 250 },
   },
   {
     id: '2',
@@ -50,24 +50,7 @@ const initialState: WindowState[] = [
       w: 250,
       h: 200,
     },
-    minDim: { xM: 250, yM: 200 },
-  },
-  {
-    id: '3',
-    title: 'Music',
-
-    appName: 'MusicApp',
-    zIndex: 0,
-    isOpen: false,
-    isMaximized: false,
-    isMinimized: false,
-    position: {
-      x: getRandomArbitrary(100, 200),
-      y: getRandomArbitrary(100, 200),
-      w: 200,
-      h: 415,
-    },
-    minDim: { xM: 200, yM: 415 },
+    minDim: { xM: 400, yM: 400 },
   },
 ];
 

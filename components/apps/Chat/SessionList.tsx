@@ -1,84 +1,70 @@
 'use client';
 import { useState, useRef } from 'react';
 import ToolTipSession from './ToolTipSession';
-import { ChatSession } from '@/state/slices/chatSlice';
-import { useAppDispatch } from '@/state/hooks';
-import { createSession, setRenameId } from '@/state/slices/chatSlice';
+import {
+  fetchSessions,
+  setCurrentSession,
+  createSession,
+  setRenameId,
+  setToolTip,
+} from '@/state/slices/chatSlice';
+import { useEffect } from 'react';
+import { useAppSelector, useAppDispatch } from '@/state/hooks';
 
-interface SessionListProps {
-  sessions: ChatSession[];
-  currentSessionId: string;
-  sessionsLoading: boolean;
-  isCreating: boolean;
-  deletedId: string;
-  renameId: string;
-  isRenaming: boolean;
-  renameInput: string;
-  onSessionSelect: (sessionId: string) => void;
-  onCreateSession: () => void;
-  isAdminView: boolean;
-}
-
-export default function SessionList({
-  sessions,
-  currentSessionId,
-  sessionsLoading,
-  isCreating,
-  deletedId,
-  renameId,
-  isRenaming,
-  renameInput,
-  onSessionSelect,
-  isAdminView,
-}: SessionListProps) {
+export default function SessionList() {
+  const {
+    sessionList,
+    currentSessionId,
+    sessionsLoading,
+    isCreating,
+    deletedId,
+    renameId,
+    isRenaming,
+    renameInput,
+    toolTip,
+  } = useAppSelector((state) => state.chat);
   const dispatch = useAppDispatch();
-  const listRef = useRef<HTMLDivElement | null>(null);
-  const [clickPos, setClickPos] = useState<{
-    x: number;
-    y: number;
-  } | null>(null);
+
+  useEffect(() => {
+    // Get sessions on mount
+    dispatch(fetchSessions());
+  }, [dispatch]);
 
   const handleCreateSession = async () => {
-    if (isAdminView) return; // Disable for admin
-
     try {
+      // Unwrap seems to be needed when dealing with promises. Look into
       const newSession = await dispatch(createSession()).unwrap();
-      onSessionSelect(newSession.id);
+      dispatch(setCurrentSession(newSession.id));
     } catch (error) {
-      console.error('Failed to create session:', error);
+      console.error('Session creation failed - ', error);
     }
   };
 
   const sessionOptions = (e: React.MouseEvent, sessionid: string) => {
-    if (isAdminView) return; // Disable for admin
-
     e.preventDefault();
     dispatch(setRenameId(sessionid));
-    setClickPos({
-      x: e.clientX,
-      y: e.clientY,
-    });
+    dispatch(setToolTip({ left: e.clientX, top: e.clientY }));
   };
 
   if (sessionsLoading) {
-    return <div>Loading sessions...</div>;
+    return <div>Looking for sessions...</div>;
   }
 
   return (
-    <div ref={listRef} className="flex flex-col items-center relative">
+    <div className="flex flex-col items-center relative">
       <button
         className="w95-button"
         onClick={handleCreateSession}
-        disabled={isCreating || isAdminView}
+        disabled={isCreating}
       >
         {isCreating ? 'Creating...' : 'New Chat'}
       </button>
 
       <div className="sessions-list">
-        {sessions.map((session) => (
+        {sessionList.map((session) => (
           <div
             key={session.id}
-            onClick={() => onSessionSelect(session.id)}
+            onClick={() => dispatch(setCurrentSession(session.id))}
             onContextMenu={(e) => sessionOptions(e, session.id)}
             className={`session-item ${
               deletedId === session.id
@@ -88,7 +74,7 @@ export default function SessionList({
                 : currentSessionId === session.id
                 ? 'active'
                 : ''
-            } ${isAdminView ? 'admin-readonly' : ''}`}
+            }`}
           >
             <h4>
               {renameId === session.id && isRenaming
@@ -101,16 +87,7 @@ export default function SessionList({
           </div>
         ))}
       </div>
-      {clickPos && !isAdminView && (
-        <ToolTipSession
-          left={clickPos.x}
-          top={clickPos.y}
-          setClickPos={setClickPos}
-          renameId={renameId}
-          renameInput={renameInput}
-          isRenaming={isRenaming}
-        />
-      )}
+      {toolTip && <ToolTipSession />}
     </div>
   );
 }

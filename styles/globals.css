@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: 'W95FA';
-  src: url('/fonts/W95FA.otf') format('opentype');
+  src: url('/fonts/w95fa.woff') format('woff');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
@@ -15,4 +15,22 @@ body {
 .minwindow {
   visibility: hidden;
   pointer-events: none;
+}
+
+.admin-center {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 10px;
+}
+
+.offline-users {
+  grid-column: 1 / -1;
+}
+
+.settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 10px;
 }

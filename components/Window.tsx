@@ -1,9 +1,11 @@
 'use client';
 import { Rnd } from 'react-rnd';
 import { WindowState } from '@/state/slices/desktopSlice';
+import { ChatState } from '@/state/slices/chatSlice';
 import ChatApp from '@/components/apps/Chat/ChatApp';
+import AdminChatApp from '@/components/apps/Chat/AdminChatApp';
 import SettingsApp from '@/components/apps/Settings/SettingsApp';
-import MusicApp from '@/components/apps/MusicApp';
+import AdminSettingsApp from './apps/Settings/AdminSettingsApp';
 import { GrClose, GrFormSubtract, GrLayer } from 'react-icons/gr';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { supabase } from '@/utils/supabase/client';
@@ -14,14 +16,20 @@ import {
   toggleView,
   closeWindow,
 } from '@/state/slices/desktopSlice';
-
+import { Profile } from './ClientApp';
 const APP_COMPONENTS = {
   ChatApp,
   SettingsApp,
-  MusicApp,
 };
 
 const theme = 'w95';
+
+interface WindowProps extends WindowState {
+  adminChatData?: ChatState;
+  adminUserData?: Profile;
+
+  isAdminView?: boolean;
+}
 
 export default function Window({
   id,
@@ -32,16 +40,23 @@ export default function Window({
   position: { x, y, h, w },
   minDim: { xM, yM },
   zIndex,
-}: WindowState) {
+  adminChatData,
+  adminUserData,
+  isAdminView = false,
+}: WindowProps) {
+  // Cool trick to get dynamic access to components
   const AppComponent = APP_COMPONENTS[appName as keyof typeof APP_COMPONENTS];
-  const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.user);
-  const profile = user.profile;
+  // Only use Redux hooks if NOT in admin view
+  const user = isAdminView ? null : useAppSelector((state) => state.user);
+  const profile = user?.profile;
+  const dispatch = isAdminView ? null : useAppDispatch();
 
-  const broadcastPosition = (
-    position: { x: number; y: number; w?: number; h?: number }
-    //size?: { width: number; height: number }
-  ) => {
+  const broadcastPosition = (position: {
+    x: number;
+    y: number;
+    w?: number;
+    h?: number;
+  }) => {
     if (profile?.id) {
       supabase.channel(`user-${profile.id}`).send({
         type: 'broadcast',
@@ -54,6 +69,7 @@ export default function Window({
       });
     }
   };
+
   return (
     <Rnd
       position={isMaximized ? { x: 0, y: 0 } : { x, y }}
@@ -69,86 +85,127 @@ export default function Window({
       minHeight={yM}
       style={{ zIndex: zIndex }}
       onDragStart={() => {
-        dispatch(bringToFront(id));
+        if (!isAdminView && dispatch) {
+          dispatch(bringToFront(id));
+        }
       }}
       onResizeStart={() => {
-        dispatch(bringToFront(id));
+        if (!isAdminView && dispatch) {
+          dispatch(bringToFront(id));
+        }
       }}
       onMouseDown={() => {
-        dispatch(bringToFront(id));
+        if (!isAdminView && dispatch) {
+          dispatch(bringToFront(id));
+        }
       }}
       onDragStop={(e, d) => {
-        dispatch(
-          updateWindowBounds({
-            id,
-            position: {
-              x: d.x,
-              y: d.y,
-            },
-          })
-        );
+        if (!isAdminView && dispatch) {
+          dispatch(
+            updateWindowBounds({
+              id,
+              position: {
+                x: d.x,
+                y: d.y,
+              },
+            })
+          );
+        }
       }}
       onResize={(e, dir, ref, delta, pos) => {
-        // Broadcast every resize movement
-        broadcastPosition({
-          x: pos.x,
-          y: pos.y,
-          w: ref.offsetWidth,
-          h: ref.offsetHeight,
-        });
+        // Only broadcast if not admin view
+        if (!isAdminView) {
+          broadcastPosition({
+            x: pos.x,
+            y: pos.y,
+            w: ref.offsetWidth,
+            h: ref.offsetHeight,
+          });
+        }
       }}
       onDrag={(e, d) => {
-        // Broadcast every resize movement
-        broadcastPosition({
-          x: d.x,
-          y: d.y,
-        });
+        // Only broadcast if not admin view
+        if (!isAdminView) {
+          broadcastPosition({
+            x: d.x,
+            y: d.y,
+          });
+        }
       }}
       onResizeStop={(e, dir, ref, delta, pos) => {
-        dispatch(
-          updateWindowBounds({
-            id,
-            position: {
-              x: pos.x,
-              y: pos.y,
-              w: ref.offsetWidth,
-              h: ref.offsetHeight,
-            },
-          })
-        );
+        if (!isAdminView && dispatch) {
+          dispatch(
+            updateWindowBounds({
+              id,
+              position: {
+                x: pos.x,
+                y: pos.y,
+                w: ref.offsetWidth,
+                h: ref.offsetHeight,
+              },
+            })
+          );
+        }
       }}
-      className={`${theme}-window ${isMinimized ? 'minwindow' : ''} `}
+      className={`${theme}-window ${isMinimized ? 'minwindow' : ''}`}
     >
       <div className={`${theme}-titlebar`}>
-        <span>{title}</span>
+        <span>
+          {title} {isAdminView && '(Admin View)'}
+        </span>
         <div className="titlebar-buttons">
           <button
             className={`${theme}-minimize`}
             onClick={() => {
-              dispatch(toggleView(id));
+              if (!isAdminView && dispatch) {
+                dispatch(toggleView(id));
+              }
             }}
+            disabled={isAdminView}
           >
             <GrFormSubtract />
           </button>
           <button
             className={`${theme}-maximize`}
             onClick={() => {
-              dispatch(toggleMax(id));
+              if (!isAdminView && dispatch) {
+                dispatch(toggleMax(id));
+              }
             }}
+            disabled={isAdminView}
           >
             <GrLayer />
           </button>
           <button
             className={`${theme}-close`}
             onClick={() => {
-              dispatch(closeWindow(id));
+              if (!isAdminView && dispatch) {
+                dispatch(closeWindow(id));
+              }
             }}
+            disabled={isAdminView}
           >
             <GrClose />
           </button>
         </div>
       </div>
-      <AppComponent />
+
+      {/* Admin version rendered if adminvi */}
+      {appName === 'ChatApp' ? (
+        isAdminView && adminChatData ? (
+          <AdminChatApp userChatState={adminChatData} />
+        ) : (
+          <ChatApp />
+        )
+      ) : appName === 'SettingsApp' ? (
+        isAdminView && adminUserData ? (
+          <AdminSettingsApp adminUserData={adminUserData} />
+        ) : (
+          <SettingsApp />
+        )
+      ) : (
+        <AppComponent />
+      )}
     </Rnd>
   );
 }

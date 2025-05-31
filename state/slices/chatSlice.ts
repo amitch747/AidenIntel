@@ -32,6 +32,7 @@ export interface ChatState {
   adminInput: string;
   chatLoading: boolean;
   isSending: boolean;
+  toolTip: { left: number; top: number } | null;
 }
 
 const initialState: ChatState = {
@@ -49,6 +50,7 @@ const initialState: ChatState = {
   renameId: '',
   isRenaming: false,
   isSending: false,
+  toolTip: null,
 };
 
 export const fetchSessions = createAsyncThunk(
@@ -192,6 +194,12 @@ const chatSlice = createSlice({
     setRenameId: (state, action: PayloadAction<string>) => {
       state.renameId = action.payload;
     },
+    setToolTip: (
+      state,
+      action: PayloadAction<{ left: number; top: number } | null>
+    ) => {
+      state.toolTip = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -212,6 +220,7 @@ const chatSlice = createSlice({
           (session) => session.id !== action.payload
         );
         state.deletedId = '';
+        state.currentSessionId = '';
       })
 
       .addCase(createSession.pending, (state, action) => {
@@ -264,6 +273,7 @@ export const {
   updateRenameInput,
   setIsRenaming,
   setRenameId,
+  setToolTip,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

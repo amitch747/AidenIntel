@@ -1,48 +1,36 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { useAppDispatch } from '@/state/hooks';
+import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import {
   deleteSession,
   renameSession,
   updateRenameInput,
   setIsRenaming,
   setRenameId,
+  setToolTip,
 } from '@/state/slices/chatSlice';
 
-interface ToolTipSessionProps {
-  left: number;
-  top: number;
-  renameId: string;
-  renameInput: string;
-  isRenaming: boolean;
-  setClickPos: React.Dispatch<
-    React.SetStateAction<{ x: number; y: number } | null>
-  >;
-}
-export default function ToolTipSession({
-  top,
-  left,
-  renameId,
-  renameInput,
-  isRenaming,
-  setClickPos,
-}: ToolTipSessionProps) {
+export default function ToolTipSession() {
   const dispatch = useAppDispatch();
+  const { renameId, renameInput, isRenaming, toolTip } = useAppSelector(
+    (state) => state.chat
+  );
+
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (ref.current && !ref.current.contains(e.target as Node)) {
-        setClickPos(null);
         dispatch(setIsRenaming(false));
         dispatch(setRenameId(''));
+        dispatch(setToolTip(null));
       }
     };
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [setClickPos, dispatch]);
+  }, [toolTip, dispatch]);
 
   const handleRenameSubmit = async () => {
     if (!renameInput.trim()) return;
@@ -53,7 +41,7 @@ export default function ToolTipSession({
       ).unwrap();
       dispatch(setIsRenaming(false));
       dispatch(updateRenameInput(''));
-      setClickPos(null);
+      dispatch(setToolTip(null));
       dispatch(setRenameId(''));
     } catch (error) {
       console.error('Failed to update session:', error);
@@ -63,7 +51,7 @@ export default function ToolTipSession({
   const handleDelete = async () => {
     try {
       await dispatch(deleteSession(renameId)).unwrap();
-      setClickPos(null);
+      dispatch(setToolTip(null));
     } catch (error) {
       console.error('Failed to update session:', error);
     }
@@ -74,8 +62,8 @@ export default function ToolTipSession({
       ref={ref}
       style={{
         position: 'absolute',
-        top: top,
-        left: left,
+        top: toolTip?.top,
+        left: toolTip?.left,
         zIndex: 9999,
       }}
     >
@@ -89,8 +77,8 @@ export default function ToolTipSession({
       ) : (
         <input
           type="text"
-          className="w-full w95-input"
-          placeholder="Enter new session title"
+          className="w95-input"
+          placeholder="Session Title"
           value={renameInput}
           onChange={(e) => dispatch(updateRenameInput(e.target.value))}
           onKeyDown={(e) => {

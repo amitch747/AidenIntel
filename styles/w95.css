@@ -1,3 +1,17 @@
+:root {
+  --greyMain: #808080;
+  --greyLight: #c0c0c0;
+  --black: #04040f;
+  --white: #ffffff;
+  --blue: #000082;
+  --blueDesktop: #008080;
+  --yellowFolder: #dfdf60;
+  --red: #ff0000;
+  --green: #008200;
+  --greenLime: #00ff00;
+  --orange: #fd5a1a;
+}
+
 ::-webkit-scrollbar {
   width: 16px;
   height: 16px;
@@ -5,7 +19,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #808080;
+  background: var(--grey1);
   border: 2px solid #c0c0c0;
   box-shadow: inset -1px -1px 0 #000, inset 1px 1px 0 #fff;
 }
@@ -14,17 +28,10 @@
   background: #a0a0a0;
 }
 
-::-webkit-scrollbar-corner {
-  background: #c0c0c0;
-}
-
 .chat-interface {
   display: flex;
-  flex-direction: row;
-  height: 100%;
-  width: 100%;
-  min-height: 0;
   overflow: hidden;
+  padding-bottom: 40px;
 }
 
 .chat-panel {
@@ -34,75 +41,79 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  margin-left: 10px;
+  margin-top: 2px;
+  box-shadow: inset -1px -1px 1 #ffffff, inset 1px 1px 1 #000;
+  padding-right: 4px;
+  padding-top: 2px;
+  border: inset 1px;
 }
 .sessions-panel {
-  width: 145px;
   flex-shrink: 0;
   height: 100%;
   overflow-y: auto;
-  background: #d4d0c8;
   display: flex;
   flex-direction: column;
+  padding-bottom: 4px;
 }
 
 .session-item {
   cursor: pointer;
   padding: 4px 6px;
-  border: 1px solid #808080;
+  box-shadow: inset -1px -1px 1 #000000, inset 1px 1px 1 #ffffff;
+
   background: #c0c0c0;
   line-height: 1.2;
   margin-bottom: 4px;
+  margin-top: 4px;
+
+  width: 85px;
+  height: 50px;
 }
 
 .session-item.active {
-  background: #050598;
-  color: white;
+  background: var(--blue);
+  color: var(--white);
 }
 
 .session-item.deleted {
-  background: #c70909;
-  color: white;
+  background: var(--red);
+  color: var(--white);
 }
-
 .session-item.editing {
-  background: #e0aa08;
-  color: white;
+  background: var(--orange);
+  color: var(--white);
 }
 
 .w95-desktop {
   position: relative;
-
   width: 100vw;
   height: calc(100vh - 32px); /* 32px is taskbar height */
-  background: #008080;
+  background: var(--blueDesktop);
   overflow: hidden; /* Add this line to prevent scrolling */
 }
 
 .w95-window {
   position: absolute;
-  background: #d4d0c8;
-  border: 0px solid #fff;
-  box-shadow: inset -1px -1px 0 #000000, inset 1px 1px 0 #ffffff;
-  font-family: 'W95FA';
+  background: #c0c0c0;
+  box-shadow: inset -1px -1px 1 #000000, inset 1px 1px 1 #ffffff;
+  font-family: var(--font-w95), sans-serif;
   display: flex;
   overflow: hidden;
 }
 
+/* TITLEBAR */
 .w95-titlebar {
-  flex-shrink: 0;
   margin: 2px;
   cursor: move;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: #000082;
-  color: #fff;
-  padding: 2px 6px;
-  height: 20px;
+  color: var(--white);
+  padding: 0px 6px;
   user-select: none;
-  top: 10px;
 }
-
 .w95-titlebar .titlebar-buttons {
   display: flex;
 }
@@ -112,7 +123,7 @@
   width: 16px;
   height: 14px;
   background: #c0c0c0;
-  color: black;
+  color: var(--black);
   font-size: 10px;
   box-shadow: inset -1px -1px 0 #000000, inset 1px 1px 0 #ffffff;
   display: flex;
@@ -120,40 +131,38 @@
   justify-content: center;
   margin-left: 8px;
 }
-
 .w95-close:active,
 .w95-maximize:active,
 .w95-minimize:active {
   box-shadow: inset 1px 1px 0 #404040, inset -1px -1px 0 #fff;
 }
 
-/* === Taskbar === */
+/* TASKBAR */
 .w95-taskbar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 32px;
+  height: 42px;
   background: #c3c3c3;
   border-top: 1px solid #a0a0a0;
   display: flex;
   gap: 4px;
   padding: 0 8px;
   align-items: center;
-  z-index: 9998;
-  font-family: 'W95FA', 'Tahoma', sans-serif;
+  z-index: 9995;
+  font-family: var(--font-w95), sans-serif;
 }
 
-/* === Buttons === */
 .w95-button {
   display: flex;
   align-items: center;
   gap: 6px;
   padding: 2px 8px;
   font-size: 13px;
-  border: 1px solid #808080;
+  border: 1px solid var(--grey1);
   background: #c0c0c0;
-  color: black;
+  color: var(--black);
   box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #404040;
   cursor: default;
   user-select: none;
@@ -163,8 +172,9 @@
   background: #dcdcdc;
 }
 .w95-button.active {
-  background: #000080;
-  color: white;
+  background: var(--blue);
+  color: var(--white);
+  border: 1px inset var(--grey1);
 }
 .w95-button.minimized {
   background: #c0c0c0;
@@ -172,17 +182,13 @@
 }
 
 .w95-input {
-  border-radius: 0;
-  appearance: none;
-  -webkit-appearance: none;
   padding: 3px 4px;
-  font-family: 'W95FA';
+  font-family: var(--font-w95), sans-serif;
   font-size: 13px;
-  border: inset 2px;
+  border: inset 4px;
   background: white;
   color: black;
   cursor: text;
-  width: 100%;
 }
 
 .w95-input:focus {

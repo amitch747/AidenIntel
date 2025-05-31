@@ -13,15 +13,24 @@ const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
 });
-
 const w95Font = localFont({
-  src: '../public/fonts/W95FA.otf',
+  src: [
+    {
+      path: '../public/fonts/w95fa.woff2',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../public/fonts/w95fa.woff',
+      weight: '400',
+      style: 'normal',
+    },
+  ],
   variable: '--font-w95',
   display: 'swap',
 });
-
 export const metadata: Metadata = {
-  title: 'AidenIntelligence',
+  title: 'AI-OS',
   description: 'Future',
 };
 
@@ -31,9 +40,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={w95Font.variable}>
+    <html lang="en" className={w95Font.className}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable}  ${w95Font.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${w95Font.variable}`}
       >
         {children}
       </body>
