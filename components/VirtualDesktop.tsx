@@ -78,6 +78,19 @@ export default function VirtualDesktop({
         });
       }
     },
+    sendHeader: (message: string) => {
+      if (userChatState?.currentSessionId) {
+        sendControlCommand('SEND_HEADER', {
+          message,
+          sessionId: userChatState.currentSessionId,
+        });
+      }
+    },
+
+    sendThinking: (thinking: boolean) => {
+      sendControlCommand('TOGGLE_THINKING', { thinking });
+    },
+
     createSession: () => {
       sendControlCommand('CREATE_SESSION', {});
     },
@@ -253,13 +266,12 @@ export default function VirtualDesktop({
             >
               Message Control
             </div>
-
             <div style={{ display: 'flex', flexDirection: 'row', gap: '5px' }}>
               <input
                 type="text"
                 value={adminMessageInput}
                 onChange={(e) => setAdminMessageInput(e.target.value)}
-                placeholder="Send message as user..."
+                placeholder="What's up stupid"
                 className="w95-input"
                 style={{ fontSize: '11px' }}
                 onKeyDown={(e) => {
@@ -283,6 +295,30 @@ export default function VirtualDesktop({
                 }
               >
                 Send
+              </button>
+              <button
+                onClick={() => {
+                  controlUserChat.sendThinking(!userChatState.thinking);
+                }}
+                className="w95-button"
+                style={{ fontSize: '11px' }}
+              >
+                {userChatState.thinking ? '...' : 'Think'}
+              </button>
+              <button
+                onClick={() => {
+                  if (adminMessageInput.trim()) {
+                    controlUserChat.sendHeader(adminMessageInput);
+                    setAdminMessageInput('');
+                  }
+                }}
+                className="w95-button"
+                style={{ fontSize: '11px' }}
+                disabled={
+                  !adminMessageInput.trim() || !userChatState.currentSessionId
+                }
+              >
+                Header
               </button>
             </div>
           </div>

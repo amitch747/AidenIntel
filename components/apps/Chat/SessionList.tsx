@@ -1,5 +1,4 @@
 'use client';
-import { useState, useRef } from 'react';
 import ToolTipSession from './ToolTipSession';
 import {
   fetchSessions,
@@ -51,13 +50,17 @@ export default function SessionList() {
   }
 
   return (
-    <div className="flex flex-col items-center relative">
+    <div className="flex flex-col items-center relative pt-1">
       <button
-        className="w95-button"
+        className="w95-button w-full not-only:justify-center"
         onClick={handleCreateSession}
-        disabled={isCreating}
+        disabled={isCreating || sessionList.length > 2}
       >
-        {isCreating ? 'Creating...' : 'New Chat'}
+        {isCreating
+          ? 'Creating...'
+          : sessionList.length > 2
+          ? '3/3 Sessions'
+          : 'New Session'}
       </button>
 
       <div className="sessions-list">
@@ -76,7 +79,7 @@ export default function SessionList() {
                 : ''
             }`}
           >
-            <h4>
+            <h4 style={{ minHeight: '1.5em' }}>
               {renameId === session.id && isRenaming
                 ? renameInput
                 : session.title}

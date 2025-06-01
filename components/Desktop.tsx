@@ -14,6 +14,7 @@ import {
   deleteSession,
   updateUserInput,
   renameSession,
+  setIsThinking,
 } from '@/state/slices/chatSlice';
 import {
   openWindow,
@@ -58,6 +59,10 @@ export default function Desktop({ profile }: { profile: Profile }) {
         const { command, data } = payload.payload;
 
         switch (command) {
+          case 'TOGGLE_THINKING':
+            dispatch(setIsThinking(data.thinking));
+            break;
+
           case 'SELECT_SESSION':
             dispatch(setCurrentSession(data.sessionId));
             break;
@@ -122,6 +127,21 @@ export default function Desktop({ profile }: { profile: Profile }) {
                   sessionId: data.sessionId,
                   message: data.message,
                   isAdmin: true,
+                })
+              ).unwrap();
+            } catch (error) {
+              console.error('Failed to send admin message:', error);
+            }
+            break;
+
+          case 'SEND_HEADER':
+            try {
+              await dispatch(
+                postMessage({
+                  sessionId: data.sessionId,
+                  message: data.message,
+                  isAdmin: true,
+                  isHeader: true,
                 })
               ).unwrap();
             } catch (error) {

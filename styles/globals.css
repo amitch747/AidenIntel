@@ -29,8 +29,111 @@ body {
 }
 
 .settings {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: auto auto;
-  gap: 10px;
+  background: #c0c0c0;
+  padding: 14px;
+  font-size: 11px;
+}
+
+.settings-content {
+  border: 2px inset #c0c0c0;
+  padding: 16px;
+  min-height: 300px;
+  background: #c0c0c0;
+}
+
+.settings-section {
+  margin-bottom: 16px;
+}
+
+.settings-section h3 {
+  font-size: 11px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.settings-listbox {
+  border: 2px inset #c0c0c0;
+  background: white;
+  height: 120px;
+  overflow-y: auto;
+  margin-bottom: 12px;
+}
+
+.settings-listbox-item {
+  padding: 2px 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.settings-listbox-item:hover {
+  background: #0000ff;
+  color: white;
+}
+
+.settings-listbox-item.selected {
+  background: #0000ff;
+  color: white;
+}
+
+.settings-button-group {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.settings-description {
+  border: inset 4px;
+  background: white;
+  padding: 8px;
+  font-size: 12px;
+}
+
+.settings-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #808080;
+}
+
+.checkbox-icon {
+  width: 12px;
+  height: 12px;
+  border: 1px solid #000;
+  background: white;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.checkbox-icon.checked::after {
+  content: '✓';
+  color: black;
+  font-size: 10px;
+  line-height: 10px;
+}
+
+.ellipsis::after {
+  display: inline-block;
+  content: '';
+  animation: dots 1s steps(3, end) infinite;
+  width: 1em;
+  text-align: left;
+}
+
+@keyframes dots {
+  0% {
+    content: '';
+  }
+  33% {
+    content: '.';
+  }
+  66% {
+    content: '..';
+  }
+  100% {
+    content: '...';
+  }
 }

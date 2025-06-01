@@ -1,5 +1,0 @@
-windows can go below taskbar
-
-windows can spawn below taskbar (same issue)
-
-fonts not showing up on first entry,  need to do it the nextjs way

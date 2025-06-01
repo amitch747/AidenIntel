@@ -5,7 +5,6 @@ import LogoutButton from './LogoutButton';
 import { useEffect, useState } from 'react';
 import VirtualDesktop from './VirtualDesktop';
 import { Profile } from './ClientApp';
-import Window from './Window';
 type OnlineUser = Profile & {
   presence_ref: string;
 };
@@ -77,7 +76,7 @@ export default function AdminCenter({ profile }: { profile: Profile }) {
                 >
                   Control {user.displayname}'s Desktop
                   <p>
-                    Last online at:{' '}
+                    Last online at:
                     {new Date(user.last_online).toLocaleString()}
                   </p>
                 </button>

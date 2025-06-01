@@ -5,6 +5,8 @@ export interface ChatMessage {
   id: string;
   session_id: string;
   is_admin: boolean;
+  is_header?: boolean;
+
   content: string;
   created_at: string;
 }
@@ -33,6 +35,9 @@ export interface ChatState {
   chatLoading: boolean;
   isSending: boolean;
   toolTip: { left: number; top: number } | null;
+
+  thinking: boolean;
+  header: boolean;
 }
 
 const initialState: ChatState = {
@@ -51,6 +56,9 @@ const initialState: ChatState = {
   isRenaming: false,
   isSending: false,
   toolTip: null,
+
+  thinking: false,
+  header: false,
 };
 
 export const fetchSessions = createAsyncThunk(
@@ -148,16 +156,19 @@ export const postMessage = createAsyncThunk(
     sessionId,
     message,
     isAdmin,
+    isHeader,
   }: {
     sessionId: string;
     message: string;
     isAdmin: boolean;
+    isHeader?: boolean;
   }) => {
     const { data: newMessage, error } = await supabase
       .from('chat_messages')
       .insert({
         content: message,
         is_admin: isAdmin,
+        is_header: isHeader || false,
         session_id: sessionId,
       })
       .select()
@@ -190,6 +201,9 @@ const chatSlice = createSlice({
     },
     setIsRenaming: (state, action: PayloadAction<boolean>) => {
       state.isRenaming = action.payload;
+    },
+    setIsThinking: (state, action: PayloadAction<boolean>) => {
+      state.thinking = action.payload;
     },
     setRenameId: (state, action: PayloadAction<string>) => {
       state.renameId = action.payload;
@@ -258,8 +272,15 @@ const chatSlice = createSlice({
         state.messages[action.payload.sessionId].push(
           action.payload.newMessage
         );
+        if (!action.payload.newMessage.is_admin) {
+          state.userInput = '';
+        } else {
+          // Admin sent this
+
+          state.adminInput = '';
+          state.thinking = false;
+        }
         state.isSending = false;
-        state.userInput = '';
       })
       .addCase(postMessage.rejected, (state) => {
         state.isSending = false;
@@ -274,6 +295,7 @@ export const {
   setIsRenaming,
   setRenameId,
   setToolTip,
+  setIsThinking,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;
