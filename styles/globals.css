@@ -32,17 +32,13 @@ body {
   background: #c0c0c0;
   padding: 14px;
   font-size: 11px;
-}
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 10px;
 
-.settings-content {
-  border: 2px inset #c0c0c0;
-  padding: 16px;
-  min-height: 300px;
-  background: #c0c0c0;
-}
+  border: inset 1px;
 
-.settings-section {
-  margin-bottom: 16px;
+  box-shadow: inset -1px -1px 1 #ffffff, inset 1px 1px 1 #000;
 }
 
 .settings-section h3 {
@@ -52,7 +48,6 @@ body {
 }
 
 .settings-listbox {
-  border: 2px inset #c0c0c0;
   background: white;
   height: 120px;
   overflow-y: auto;
@@ -65,38 +60,18 @@ body {
   display: flex;
   align-items: center;
   gap: 4px;
+  width: 100%;
 }
 
 .settings-listbox-item:hover {
-  background: #0000ff;
+  background: #000082c9;
   color: white;
 }
 
 .settings-listbox-item.selected {
-  background: #0000ff;
+  background: #000082;
   color: white;
-}
-
-.settings-button-group {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 16px;
-}
-
-.settings-description {
-  border: inset 4px;
-  background: white;
-  padding: 8px;
-  font-size: 12px;
-}
-
-.settings-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 16px;
-  padding-top: 12px;
-  border-top: 1px solid #808080;
+  outline: 1px dotted black;
 }
 
 .checkbox-icon {
@@ -109,7 +84,7 @@ body {
 }
 
 .checkbox-icon.checked::after {
-  content: '✓';
+  content: 'X';
   color: black;
   font-size: 10px;
   line-height: 10px;

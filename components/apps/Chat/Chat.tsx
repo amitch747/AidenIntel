@@ -167,9 +167,9 @@ export default function Chat() {
         <button
           onClick={handleSend}
           disabled={isSending}
-          className="w95-button"
+          className="w95-button h-[35px] w-[50px] items-center justify-center"
         >
-          {isSending ? 'Sending...' : 'Send'}
+          {isSending ? 'Sending' : 'Send'}
         </button>
       </div>
     </div>

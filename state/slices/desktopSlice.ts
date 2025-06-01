@@ -50,7 +50,7 @@ const initialState: WindowState[] = [
       w: 250,
       h: 200,
     },
-    minDim: { xM: 400, yM: 400 },
+    minDim: { xM: 500, yM: 365 },
   },
 ];
 

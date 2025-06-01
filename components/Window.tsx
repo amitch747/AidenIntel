@@ -177,7 +177,7 @@ export default function Window({
             <GrLayer />
           </button>
           <button
-            className={`${theme}-close`}
+            className={`w95-close`}
             onClick={() => {
               if (!isAdminView && dispatch) {
                 dispatch(closeWindow(id));

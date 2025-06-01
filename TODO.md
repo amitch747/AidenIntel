@@ -8,12 +8,18 @@
 - ~~Ability to add headers on chat~~
 - ~~Limit session creation and message sending~~
 - ~~Type writer effect~~
+- Message sounds, block sending messages if I'm offline, messages sent notif to admin pannel
+- When admin messages a session, give little indicator on chatapp and on the session itself
 
 ### Settings
 
-- Profile (startup jingle, name, cursor type, jump scares (not a real thing)), AI settings (Voice, personality), Time, Privacy & Security (a toggle button that does nothing),
-- Fix css
+- ~~Profile (startup jingle, name, cursor type, jump scares (not a real thing)), AI settings (Voice, personality), Time, Privacy & Security (a toggle button that does nothing),~~
+- ~~Fix css~~
 - Setup local storage to hold all this shit (none of this is database)
+- Cursor
+- Voice
+- Time
+- Jump scares
 
 ### Desktop
 
@@ -29,7 +35,7 @@
 
 - ~~Rename live update~~
 - ~~Last online for user~~
-- ~~ Min and max buttons for admin control~~
+- ~~Min and max buttons for admin control~~
 - ~~Settings app admin control (use user state really)~~
 
 ## Backend
@@ -39,15 +45,16 @@
 
 - ~~Delete sessions~~
 
-### Security
+### Security/Performance
 
 - Hide redux store shit for non admins?
 - Throttle broadcasts, or just remove
 
-## Bug
+## Bugs
 
+- Translucent tooltip
 - Different screen sizes, needs to be normalize
 - ~~State not loading right away for admin~~
 - ~~Font only shows up sometimes~~
-- ~~ Chat not updating on session delete~~
+- ~~Chat not updating on session delete~~
 - ~~Window not updating on position change by admin~~

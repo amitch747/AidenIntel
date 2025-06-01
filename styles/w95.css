@@ -160,13 +160,12 @@
   gap: 6px;
   padding: 2px 8px;
   font-size: 13px;
-  border: 1px solid var(--grey1);
-  background: #c0c0c0;
+  background: var(--grey1);
   color: var(--black);
-  box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #404040;
-  cursor: default;
-  user-select: none;
+  box-shadow: inset 1px 1px 1 #ffffff, inset -1px -1px 1 #000000;
+  cursor: pointer;
   transition: background 0.1s ease;
+  justify-content: center;
 }
 .w95-button:hover {
   background: #dcdcdc;
@@ -189,8 +188,4 @@
   background: white;
   color: black;
   cursor: text;
-}
-
-.w95-input:focus {
-  outline: none;
 }

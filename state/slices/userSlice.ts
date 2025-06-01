@@ -5,6 +5,18 @@ import { supabase } from '@/utils/supabase/client';
 export interface UserState {
   profile: Profile | null;
   updating: boolean;
+  coolCursor: boolean;
+  privacy: boolean;
+  jump: boolean;
+  voice: boolean;
+  web3: boolean;
+  foul: boolean;
+  window: boolean;
+  backseat: boolean;
+  time: boolean;
+
+  personality: 'Regular' | 'Petulant' | 'Unintelligible';
+  startup: number;
 }
 
 export const changeTheme = createAsyncThunk(
@@ -33,11 +45,61 @@ export const changeName = createAsyncThunk(
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: { profile: null } as UserState,
+  initialState: {
+    profile: null,
+    updating: false,
+    coolCursor: false,
+    privacy: false,
+    jump: false,
+    voice: false,
+    web3: false,
+    foul: false,
+    window: false,
+    backseat: false,
+    time: false,
+    personality: 'Regular',
+    startup: 1,
+  } as UserState,
   reducers: {
     setProfile: (state, action) => {
       // Very simple, i just need to dispatch in root page
       state.profile = action.payload;
+    },
+    toggleCursor: (state, action: PayloadAction<boolean>) => {
+      state.coolCursor = action.payload;
+    },
+    togglePrivacy: (state, action: PayloadAction<boolean>) => {
+      state.privacy = action.payload;
+    },
+    toggleJump: (state, action: PayloadAction<boolean>) => {
+      state.jump = action.payload;
+    },
+    toggleVoice: (state, action: PayloadAction<boolean>) => {
+      state.voice = action.payload;
+    },
+    toggleWeb3: (state, action: PayloadAction<boolean>) => {
+      state.web3 = action.payload;
+    },
+    toggleFoul: (state, action: PayloadAction<boolean>) => {
+      state.foul = action.payload;
+    },
+    toggleWindow: (state, action: PayloadAction<boolean>) => {
+      state.window = action.payload;
+    },
+    toggleBackseat: (state, action: PayloadAction<boolean>) => {
+      state.backseat = action.payload;
+    },
+    toggleTime: (state, action: PayloadAction<boolean>) => {
+      state.time = action.payload;
+    },
+    changePersonality: (
+      state,
+      action: PayloadAction<'Regular' | 'Petulant' | 'Unintelligible'>
+    ) => {
+      state.personality = action.payload;
+    },
+    changeStartup: (state, action: PayloadAction<number>) => {
+      state.startup = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -66,6 +128,19 @@ const userSlice = createSlice({
   },
 });
 
-export const { setProfile } = userSlice.actions;
+export const {
+  setProfile,
+  toggleCursor,
+  toggleBackseat,
+  toggleFoul,
+  toggleJump,
+  togglePrivacy,
+  toggleTime,
+  toggleVoice,
+  toggleWeb3,
+  toggleWindow,
+  changePersonality,
+  changeStartup,
+} = userSlice.actions;
 
 export default userSlice.reducer;
