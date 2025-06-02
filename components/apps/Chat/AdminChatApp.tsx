@@ -30,6 +30,7 @@ export default function AdminChatApp({
           userInput={userChatState.userInput}
           chatLoading={userChatState.chatLoading}
           isSending={userChatState.isSending}
+          thinking={userChatState.thinking}
         />
       </div>
     </div>

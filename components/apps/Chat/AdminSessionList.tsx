@@ -31,16 +31,23 @@ export default function AdminSessionList({
   }
 
   return (
-    <div className="flex flex-col items-center relative">
-      <button className="w95-button" disabled={true} style={{ opacity: 0.6 }}>
-        {isCreating ? 'Creating...' : 'New Chat'}
+    <div className="flex flex-col items-center relative pt-1">
+      <button
+        className="w95-button w-full not-only:justify-center"
+        disabled={isCreating || sessions.length > 2}
+      >
+        {isCreating
+          ? 'Creating...'
+          : sessions.length > 2
+          ? '3/3 Sessions'
+          : 'New Session'}
       </button>
 
       <div className="sessions-list">
         {sessions.map((session) => (
           <div
             key={session.id}
-            className={`session-item admin-readonly ${
+            className={`session-item ${
               deletedId === session.id
                 ? 'deleted'
                 : renameId === session.id
@@ -50,7 +57,7 @@ export default function AdminSessionList({
                 : ''
             }`}
           >
-            <h4>
+            <h4 style={{ minHeight: '1.5em' }}>
               {renameId === session.id && isRenaming
                 ? renameInput
                 : session.title}
@@ -63,8 +70,8 @@ export default function AdminSessionList({
       </div>
       {toolTip && (
         <AdminToolTipSession
-          toolTip={toolTip}
           isRenaming={isRenaming}
+          toolTip={toolTip}
           renameInput={renameInput}
         />
       )}

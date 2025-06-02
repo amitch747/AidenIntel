@@ -22,7 +22,8 @@ export default function AdminToolTipSession({
         position: 'absolute',
         top: toolTip?.top,
         left: toolTip?.left,
-        zIndex: 9999,
+        zIndex: 9000,
+        backgroundColor: '#c0c0c0',
       }}
     >
       {!isRenaming ? (

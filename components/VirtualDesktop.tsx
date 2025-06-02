@@ -7,6 +7,7 @@ import { WindowState } from '@/state/slices/desktopSlice';
 import { ChatState } from '@/state/slices/chatSlice';
 import { Profile } from './ClientApp';
 
+import { UserState } from '@/state/slices/userSlice';
 interface VirtualDesktopProps {
   userId: string;
   onBack: () => void;
@@ -19,7 +20,7 @@ export default function VirtualDesktop({
   const [userDesktopState, setUserDesktopState] = useState<WindowState[]>([]);
   const [liveUpdates, setLiveUpdates] = useState<Map<string, any>>(new Map());
   const [userChatState, setUserChatState] = useState<ChatState | null>(null);
-  const [userState, setUserState] = useState<Profile>();
+  const [userState, setUserState] = useState<UserState>();
   const [adminMessageInput, setAdminMessageInput] = useState('');
   const [windowInputs, setWindowInputs] = useState<{
     [windowId: string]: { x: number; y: number; w: number; h: number };
@@ -31,7 +32,7 @@ export default function VirtualDesktop({
       .on('broadcast', { event: 'desktop-state' }, (payload) => {
         setUserDesktopState(payload.payload.windows);
         setUserChatState(payload.payload.chat || null);
-        setUserState(payload.payload.user.profile);
+        setUserState(payload.payload.user);
       })
       .on('broadcast', { event: 'window-live-update' }, (payload) => {
         setLiveUpdates(
@@ -147,6 +148,7 @@ export default function VirtualDesktop({
       return app;
     });
 
+  console.log(userState);
   return (
     <div>
       {userChatState && (
@@ -604,7 +606,7 @@ export default function VirtualDesktop({
           zIndex: 9999,
         }}
       >
-        Controlling User: {userState?.displayname}
+        Controlling User: {userState?.profile?.displayname}
       </div>
 
       <button

@@ -17,6 +17,7 @@ import {
   closeWindow,
 } from '@/state/slices/desktopSlice';
 import { Profile } from './ClientApp';
+import { UserState } from '@/state/slices/userSlice';
 const APP_COMPONENTS = {
   ChatApp,
   SettingsApp,
@@ -26,7 +27,7 @@ const theme = 'w95';
 
 interface WindowProps extends WindowState {
   adminChatData?: ChatState;
-  adminUserData?: Profile;
+  adminUserData?: UserState;
 
   isAdminView?: boolean;
 }

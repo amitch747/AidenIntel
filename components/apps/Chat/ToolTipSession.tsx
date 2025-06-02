@@ -65,6 +65,7 @@ export default function ToolTipSession() {
         top: toolTip?.top,
         left: toolTip?.left,
         zIndex: 9999,
+        backgroundColor: '#c0c0c0',
       }}
     >
       {!isRenaming ? (
