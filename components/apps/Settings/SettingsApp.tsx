@@ -69,7 +69,6 @@ export default function SettingsApp() {
             className={`settings-listbox-item ${
               userState.privacy ? 'selected' : ''
             }`}
-            onClick={() => dispatch(togglePrivacy(!userState.privacy))}
           >
             <GrClose />
             Privacy & Security
@@ -95,15 +94,6 @@ export default function SettingsApp() {
           </button>
           <button
             className={`settings-listbox-item ${
-              userState.foul ? 'selected' : ''
-            }`}
-            onClick={() => dispatch(toggleFoul(!userState.foul))}
-          >
-            <GrClose />
-            Foul Language
-          </button>
-          <button
-            className={`settings-listbox-item ${
               userState.window ? 'selected' : ''
             }`}
             onClick={() => dispatch(toggleWindow(!userState.window))}
@@ -120,15 +110,6 @@ export default function SettingsApp() {
             <GrClose />
             {/* RENDER Clock */}
             Mountain Time
-          </button>
-          <button
-            className={`settings-listbox-item ${
-              userState.jump ? 'selected' : ''
-            }`}
-            onClick={() => dispatch(toggleJump(!userState.jump))}
-          >
-            <GrClose />
-            Jump Scares
           </button>
         </div>
       </div>

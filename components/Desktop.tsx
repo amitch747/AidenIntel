@@ -189,6 +189,14 @@ export default function Desktop({ profile }: { profile: Profile }) {
     };
   }, [desktopState, chatState, userState, dispatch]);
 
+  useEffect(() => {
+    if (userState.coolCursor) {
+      document.documentElement.classList.add('cool-cursor');
+    } else {
+      document.documentElement.classList.remove('cool-cursor');
+    }
+  }, [userState.coolCursor]);
+
   const openApps = desktopState.filter((app) => app.isOpen);
   return (
     <>

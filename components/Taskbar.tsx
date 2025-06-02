@@ -1,24 +1,25 @@
 import { useAppSelector, useAppDispatch } from '@/state/hooks';
 import { openWindow, toggleView } from '@/state/slices/desktopSlice';
-import '@/styles/globals.css';
+import Time from './Time';
 import LogoutButton from '@/components/LogoutButton';
-
-const theme = 'w95';
 
 export default function Taskbar() {
   const apps = useAppSelector((state) => state.desktop);
+  const user = useAppSelector((state) => state.user);
+
   const dispatch = useAppDispatch();
 
   return (
-    <div className={`${theme}-taskbar`}>
+    <div className={`w95-taskbar`}>
+      <LogoutButton />
+
       {apps.map(({ id, appName, isOpen, isMinimized }) => (
         <button
           key={id}
-          className={`${theme}-button ${
+          className={`w95-button ${
             isOpen ? `${!isMinimized ? 'active' : 'minimized'}` : ''
           }`}
           onClick={() => {
-            //isOpen ? dispatch(toggleView(id)) : dispatch(openWindow(id)); NOT ALLOWED. WHY.
             if (isOpen) {
               dispatch(toggleView(id));
             } else {
@@ -29,7 +30,12 @@ export default function Taskbar() {
           {appName}
         </button>
       ))}
-      <LogoutButton />
+      <div
+        className={`${user.time ? 'w95-time' : ''}`}
+        style={{ position: 'absolute', right: '8px' }}
+      >
+        {user.time ? <Time /> : <></>}
+      </div>
     </div>
   );
 }

@@ -189,3 +189,12 @@
   color: black;
   cursor: text;
 }
+
+.w95-time {
+  padding: 2px 6px;
+  font-family: var(--font-w95), sans-serif;
+  font-size: 13px;
+  border: inset 2px;
+  background: #c0c0c0;
+  color: black;
+}

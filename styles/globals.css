@@ -112,3 +112,7 @@ body {
     content: '...';
   }
 }
+
+.cool-cursor {
+  cursor: crosshair;
+}
