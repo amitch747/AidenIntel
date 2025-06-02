@@ -7,7 +7,8 @@ import AdminCenter from './AdminCenter';
 import { supabase } from '@/utils/supabase/client';
 import { useEffect } from 'react';
 import { UUID } from 'crypto';
-
+import { useAppSelector, useAppDispatch } from '@/state/hooks';
+import { toggleAdmin } from '@/state/slices/userSlice';
 export type Profile = {
   id: UUID;
   is_admin: boolean;
@@ -33,27 +34,6 @@ export default function ClientApp({ profile }: { profile: Profile }) {
 
     updateLastOnline();
   }, [profile.id]);
-
-  useEffect(() => {
-    // Only subscribe if not admin, admin will sub later within admincenter
-    if (profile.is_admin) return;
-
-    const presenceRoom = supabase.channel('presence');
-    presenceRoom.subscribe(async (status) => {
-      if (status === 'SUBSCRIBED') {
-        await presenceRoom.track({
-          id: profile.id,
-          is_admin: profile.is_admin,
-          displayname: profile.displayname,
-          theme: profile.displayname,
-          last_online: profile.last_online,
-        });
-      }
-    });
-    return () => {
-      presenceRoom.unsubscribe();
-    };
-  }, [profile]);
 
   return (
     <>

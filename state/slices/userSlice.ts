@@ -17,6 +17,8 @@ export interface UserState {
 
   personality: 'Regular' | 'Petulant' | 'Unintelligible';
   startup: number;
+
+  admin_online: boolean;
 }
 
 export const changeTheme = createAsyncThunk(
@@ -56,9 +58,10 @@ const userSlice = createSlice({
     foul: false,
     window: false,
     backseat: false,
-    time: false,
+    time: true,
     personality: 'Regular',
     startup: 1,
+    admin_online: false,
   } as UserState,
   reducers: {
     setProfile: (state, action) => {
@@ -101,6 +104,9 @@ const userSlice = createSlice({
     changeStartup: (state, action: PayloadAction<number>) => {
       state.startup = action.payload;
     },
+    toggleAdmin: (state, action: PayloadAction<boolean>) => {
+      state.admin_online = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -141,6 +147,7 @@ export const {
   toggleWindow,
   changePersonality,
   changeStartup,
+  toggleAdmin,
 } = userSlice.actions;
 
 export default userSlice.reducer;

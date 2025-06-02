@@ -85,6 +85,7 @@ export default function AdminSettingsApp({
             className="w95-input"
             style={{ width: '200px', marginBottom: '12px' }}
             value={adminUserData.personality}
+            onChange={(e) => {}}
           >
             <option>Regular</option>
             <option>Petulant</option>
@@ -124,6 +125,8 @@ export default function AdminSettingsApp({
           <select
             className="w95-input"
             style={{ width: '200px', marginBottom: '12px' }}
+            value={adminUserData.startup}
+            onChange={(e) => {}}
           >
             <option value={1}>Startup_Audio #1.wav</option>
             <option value={2}>Startup_Audio #2.wav</option>

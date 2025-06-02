@@ -4,7 +4,7 @@ import TaskBar from '@/components/Taskbar';
 import { useAppSelector, useAppDispatch } from '@/state/hooks';
 import Window from './Window';
 import { useEffect } from 'react';
-import { setProfile } from '@/state/slices/userSlice';
+import { setProfile, toggleAdmin } from '@/state/slices/userSlice';
 import { supabase } from '@/utils/supabase/client';
 import { Profile } from './ClientApp';
 import {
@@ -33,6 +33,44 @@ export default function Desktop({ profile }: { profile: Profile }) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    if (profile.is_admin) return;
+
+    const presenceRoom = supabase.channel('presence');
+    presenceRoom
+      .on('broadcast', { event: 'admin_status' }, (payload) => {
+        const { status } = payload.payload;
+        if (status === 'online') {
+          dispatch(toggleAdmin(true));
+        } else if (status === 'offline') {
+          dispatch(toggleAdmin(false));
+        }
+      })
+      .subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          // Track user presence
+          await presenceRoom.track({
+            id: profile.id,
+            is_admin: profile.is_admin,
+            displayname: profile.displayname,
+            theme: profile.theme,
+            last_online: profile.last_online,
+          });
+
+          // Request current admin status
+          await presenceRoom.send({
+            type: 'broadcast',
+            event: 'request_admin_status',
+            payload: { requesting_user: profile.id },
+          });
+        }
+      });
+
+    return () => {
+      presenceRoom.unsubscribe();
+    };
+  }, [profile, dispatch]);
+
+  useEffect(() => {
     // Finally set profile in store so the drilling may end
     dispatch(setProfile(profile));
   }, [profile, dispatch]);
@@ -54,6 +92,7 @@ export default function Desktop({ profile }: { profile: Profile }) {
           },
         });
       })
+
       .on('broadcast', { event: 'admin-control' }, async (payload) => {
         // Respond to admin broadcasts
         const { command, data } = payload.payload;
@@ -201,6 +240,19 @@ export default function Desktop({ profile }: { profile: Profile }) {
   return (
     <>
       <main className="w95-desktop">
+        {/* AI Online Indicator */}
+        {userState.admin_online && (
+          <div className="ai-online-indicator">
+            <div className="ai-status-light"></div>
+            <span>AI Online</span>
+          </div>
+        )}
+        {!userState.admin_online && (
+          <div className="ai-online-indicator">
+            <span>AI Offline</span>
+          </div>
+        )}
+
         {openApps.map((app) => (
           <Window key={app.id} {...app} />
         ))}

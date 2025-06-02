@@ -17,6 +17,7 @@ export default function AdminCenter({ profile }: { profile: Profile }) {
 
   useEffect(() => {
     const presenceRoom = supabase.channel('presence');
+
     presenceRoom
       .on('presence', { event: 'sync' }, () => {
         const users = Object.values(
@@ -24,22 +25,44 @@ export default function AdminCenter({ profile }: { profile: Profile }) {
         ).flat() as OnlineUser[];
         setOnlineUsers(users);
       })
-      .subscribe();
+      .on('broadcast', { event: 'request_admin_status' }, async (payload) => {
+        // Respond to user requests for admin status
+        await presenceRoom.send({
+          type: 'broadcast',
+          event: 'admin_status',
+          payload: {
+            status: 'online',
+            timestamp: new Date().toISOString(),
+          },
+        });
+      })
+      .subscribe(async (status) => {
+        if (status === 'SUBSCRIBED') {
+          // Initial broadcast
+          await presenceRoom.send({
+            type: 'broadcast',
+            event: 'admin_status',
+            payload: {
+              status: 'online',
+              timestamp: new Date().toISOString(),
+            },
+          });
+        }
+      });
 
-    const fetchUserProfiles = async () => {
-      const { data: profiles } = await supabase
-        .from('profiles')
-        .select('id, displayname, last_online, is_admin, theme');
-      const nonAdminProfiles =
-        profiles?.filter((profile) => !profile.is_admin) || [];
-      setUserProfiles(nonAdminProfiles);
-    };
-    fetchUserProfiles();
-
+    // Cleanup: broadcast admin going offline
     return () => {
+      presenceRoom.send({
+        type: 'broadcast',
+        event: 'admin_status',
+        payload: {
+          status: 'offline',
+          timestamp: new Date().toISOString(),
+        },
+      });
       presenceRoom.unsubscribe();
     };
-  }, []);
+  }, [profile]);
 
   if (selectedUserId) {
     return (

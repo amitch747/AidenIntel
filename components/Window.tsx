@@ -9,6 +9,7 @@ import AdminSettingsApp from './apps/Settings/AdminSettingsApp';
 import { GrClose, GrFormSubtract, GrLayer } from 'react-icons/gr';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
 import { supabase } from '@/utils/supabase/client';
+
 import {
   bringToFront,
   updateWindowBounds,
@@ -16,7 +17,6 @@ import {
   toggleView,
   closeWindow,
 } from '@/state/slices/desktopSlice';
-import { Profile } from './ClientApp';
 import { UserState } from '@/state/slices/userSlice';
 const APP_COMPONENTS = {
   ChatApp,
@@ -113,26 +113,26 @@ export default function Window({
           );
         }
       }}
-      onResize={(e, dir, ref, delta, pos) => {
-        // Only broadcast if not admin view
-        if (!isAdminView) {
-          broadcastPosition({
-            x: pos.x,
-            y: pos.y,
-            w: ref.offsetWidth,
-            h: ref.offsetHeight,
-          });
-        }
-      }}
-      onDrag={(e, d) => {
-        // Only broadcast if not admin view
-        if (!isAdminView) {
-          broadcastPosition({
-            x: d.x,
-            y: d.y,
-          });
-        }
-      }}
+      // onResize={(e, dir, ref, delta, pos) => {
+      //   // Only broadcast if not admin view
+      //   if (!isAdminView) {
+      //     broadcastPosition({
+      //       x: pos.x,
+      //       y: pos.y,
+      //       w: ref.offsetWidth,
+      //       h: ref.offsetHeight,
+      //     });
+      //   }
+      // }}
+      // onDrag={(e, d) => {
+      //   // Only broadcast if not admin view
+      //   if (!isAdminView) {
+      //     broadcastPosition({
+      //       x: d.x,
+      //       y: d.y,
+      //     });
+      //   }
+      // }}
       onResizeStop={(e, dir, ref, delta, pos) => {
         if (!isAdminView && dispatch) {
           dispatch(
