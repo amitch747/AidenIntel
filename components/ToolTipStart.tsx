@@ -11,7 +11,6 @@ export default function ToolTipStart({
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [shouldRender, setShouldRender] = useState(true);
 
   // Start slide-up animation when component mounts
   useEffect(() => {
@@ -62,7 +61,7 @@ export default function ToolTipStart({
         AidenIntelligence V1.0.1
       </h1>
       <p>
-        AidenIntelligence is the world's first agentic operating system. AI has
+        AidenIntelligence is the worlds first agentic operating system. AI has
         complete control of everything on your desktop and inside of your apps.
         Open up the chat and say something.
       </p>

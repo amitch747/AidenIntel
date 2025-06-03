@@ -2,9 +2,7 @@
 import { useAppSelector, useAppDispatch } from '@/state/hooks';
 
 import {
-  setProfile,
   toggleBackseat,
-  toggleFoul,
   toggleJump,
   toggleTime,
   toggleVoice,

@@ -7,7 +7,6 @@ import { Provider } from '@supabase/supabase-js';
 import { FaGithub, FaDiscord } from 'react-icons/fa';
 import { Rnd } from 'react-rnd';
 import { useState } from 'react';
-import { GrLanguage } from 'react-icons/gr';
 
 const providers: {
   id: Provider;
@@ -21,7 +20,7 @@ const providers: {
 export default function LoginPage() {
   // Send user back home if logged in
   const [position, setPosition] = useState({ x: 200, y: 100 });
-  const [size, setSize] = useState({ width: 300, height: 130 });
+  const size = { width: 300, height: 130 };
   const router = useRouter();
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {

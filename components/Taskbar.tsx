@@ -1,7 +1,7 @@
 import { useAppSelector, useAppDispatch } from '@/state/hooks';
 import { openWindow, toggleView } from '@/state/slices/desktopSlice';
 import Time from './Time';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import ToolTipStart from './ToolTipStart';
 import Image from 'next/image';
 
@@ -34,7 +34,7 @@ export default function Taskbar() {
       </div>
 
       <div className="flex justify-center flex-1 gap-2">
-        {apps.map(({ id, title, appName, isOpen, isMinimized }) => (
+        {apps.map(({ id, title, isOpen, isMinimized }) => (
           <button
             key={id}
             className={`w95-button flex items-center gap-2 ${

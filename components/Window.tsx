@@ -52,24 +52,24 @@ export default function Window({
   const profile = user?.profile;
   const dispatch = isAdminView ? null : useAppDispatch();
 
-  const broadcastPosition = (position: {
-    x: number;
-    y: number;
-    w?: number;
-    h?: number;
-  }) => {
-    if (profile?.id) {
-      supabase.channel(`user-${profile.id}`).send({
-        type: 'broadcast',
-        event: 'window-live-update',
-        payload: {
-          windowId: id,
-          position,
-          timestamp: Date.now(),
-        },
-      });
-    }
-  };
+  // const broadcastPosition = (position: {
+  //   x: number;
+  //   y: number;
+  //   w?: number;
+  //   h?: number;
+  // }) => {
+  //   if (profile?.id) {
+  //     supabase.channel(`user-${profile.id}`).send({
+  //       type: 'broadcast',
+  //       event: 'window-live-update',
+  //       payload: {
+  //         windowId: id,
+  //         position,
+  //         timestamp: Date.now(),
+  //       },
+  //     });
+  //   }
+  // };
 
   return (
     <Rnd

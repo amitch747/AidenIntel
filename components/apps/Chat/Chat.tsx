@@ -94,7 +94,7 @@ export default function Chat() {
     <div className="flex flex-col h-full w95-box-shadow">
       <div className="flex-1 overflow-y-auto p-4" ref={messagesEndRef}>
         <div className="flex flex-col gap-2">
-          {currentMessages.map((message: ChatMessage, index) => {
+          {currentMessages.map((message: ChatMessage) => {
             const isLatestAdminMessage =
               message.is_admin && message.id === latestMessage?.id;
 

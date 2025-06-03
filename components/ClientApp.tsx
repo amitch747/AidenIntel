@@ -1,12 +1,9 @@
 'use client';
 
 import Desktop from '@/components/Desktop';
-import AdminCenter from './AdminCenter';
 import { supabase } from '@/utils/supabase/client';
 import { useEffect, useState } from 'react';
 import { UUID } from 'crypto';
-import { useAppSelector, useAppDispatch } from '@/state/hooks';
-import { toggleAdmin } from '@/state/slices/userSlice';
 import StartupScreen from '@/components/StartupScreen';
 
 import { Provider } from 'react-redux';
