@@ -30,20 +30,20 @@ export default function Backseat() {
     audio: '',
   });
 
-  const playMessageWithAudio = (messageObj: {
-    content: string;
-    audio: string;
-  }) => {
-    // Play audio
-    if (voice) {
-      const audio = new Audio(messageObj.audio);
-      audio.play().catch(console.error); // Handle audio errors gracefully
-    }
+  const playMessageWithAudio = useCallback(
+    (messageObj: { content: string; audio: string }) => {
+      // Play audio
+      if (voice) {
+        const audio = new Audio(messageObj.audio);
+        audio.play().catch(console.error);
+      }
 
-    // Show text
-    setCurrentMessage(messageObj);
-    setIsVisible(true);
-  };
+      // Show text
+      setCurrentMessage(messageObj);
+      setIsVisible(true);
+    },
+    [voice]
+  );
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
@@ -57,7 +57,7 @@ export default function Backseat() {
         timer = setTimeout(() => {
           playMessageWithAudio(getRandomMessage());
 
-          // Hide after 20 seconds, then restart cycle
+          // Hide after 15 seconds, then restart cycle
           timer = setTimeout(() => {
             setIsVisible(false);
             startCycle();
@@ -73,7 +73,7 @@ export default function Backseat() {
     return () => {
       if (timer) clearTimeout(timer);
     };
-  }, [backseat, getRandomMessage, playMessageWithAudio]);
+  }, [backseat, getRandomMessage, playMessageWithAudio]); // Now this won't constantly change
 
   if (!backseat || !isVisible) {
     return null;

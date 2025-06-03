@@ -25,7 +25,7 @@ export default function AdminCenter({ profile }: { profile: Profile }) {
         ).flat() as OnlineUser[];
         setOnlineUsers(users);
       })
-      .on('broadcast', { event: 'request_admin_status' }, async (payload) => {
+      .on('broadcast', { event: 'request_admin_status' }, async () => {
         // Respond to user requests for admin status
         await presenceRoom.send({
           type: 'broadcast',
@@ -64,6 +64,26 @@ export default function AdminCenter({ profile }: { profile: Profile }) {
     };
   }, [profile]);
 
+  useEffect(() => {
+    // Fetch all user profiles from database
+    const fetchUserProfiles = async () => {
+      const { data, error } = await supabase
+        .from('profiles') // assuming your table name
+        .select('*');
+
+      if (data && !error) {
+        setUserProfiles(data);
+      }
+    };
+
+    fetchUserProfiles();
+  }, [onlineUsers]);
+
+  // Then you'll need to calculate offline users in your render:
+  const offlineUsers = userProfiles.filter(
+    (profile) => !onlineUsers.some((onlineUser) => onlineUser.id === profile.id)
+  );
+
   if (selectedUserId) {
     return (
       <VirtualDesktop
@@ -97,7 +117,7 @@ export default function AdminCenter({ profile }: { profile: Profile }) {
                     cursor: 'pointer',
                   }}
                 >
-                  Control {user.displayname}'s Desktop
+                  {`Control ${user.displayname}'s Desktop`}
                   <p>
                     Last online at:
                     {new Date(user.last_online).toLocaleString()}
@@ -112,7 +132,7 @@ export default function AdminCenter({ profile }: { profile: Profile }) {
       <div className="offline-users">
         <h3>Offline Users:</h3>
         <ul>
-          {userProfiles.map((user) => (
+          {offlineUsers.map((user) => (
             <li
               key={user.id}
               style={{
