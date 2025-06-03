@@ -8,7 +8,6 @@ import SettingsApp from '@/components/apps/Settings/SettingsApp';
 import AdminSettingsApp from './apps/Settings/AdminSettingsApp';
 import { GrClose, GrFormSubtract, GrLayer } from 'react-icons/gr';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
-import { supabase } from '@/utils/supabase/client';
 
 import {
   bringToFront,
@@ -48,28 +47,27 @@ export default function Window({
   // Cool trick to get dynamic access to components
   const AppComponent = APP_COMPONENTS[appName as keyof typeof APP_COMPONENTS];
   // Only use Redux hooks if NOT in admin view
-  const user = isAdminView ? null : useAppSelector((state) => state.user);
-  const profile = user?.profile;
-  const dispatch = isAdminView ? null : useAppDispatch();
+  const user = !isAdminView ? useAppSelector((state) => state.user) : null;
+  const dispatch = !isAdminView ? useAppDispatch() : null;
 
-  const broadcastPosition = (position: {
-    x: number;
-    y: number;
-    w?: number;
-    h?: number;
-  }) => {
-    if (profile?.id) {
-      supabase.channel(`user-${profile.id}`).send({
-        type: 'broadcast',
-        event: 'window-live-update',
-        payload: {
-          windowId: id,
-          position,
-          timestamp: Date.now(),
-        },
-      });
-    }
-  };
+  // const broadcastPosition = (position: {
+  //   x: number;
+  //   y: number;
+  //   w?: number;
+  //   h?: number;
+  // }) => {
+  //   if (profile?.id) {
+  //     supabase.channel(`user-${profile.id}`).send({
+  //       type: 'broadcast',
+  //       event: 'window-live-update',
+  //       payload: {
+  //         windowId: id,
+  //         position,
+  //         timestamp: Date.now(),
+  //       },
+  //     });
+  //   }
+  // };
 
   return (
     <Rnd

@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { GrClose } from 'react-icons/gr';
 import { UserState } from '@/state/slices/userSlice';
 export default function AdminSettingsApp({
@@ -8,8 +7,6 @@ export default function AdminSettingsApp({
 }: {
   adminUserData: UserState;
 }) {
-  const [userInput, setUserInput] = useState<string>('');
-
   return (
     <div className=" settings ">
       <div className="settings-section">
@@ -85,7 +82,7 @@ export default function AdminSettingsApp({
             className="w95-input"
             style={{ width: '200px', marginBottom: '12px' }}
             value={adminUserData.personality}
-            onChange={(e) => {}}
+            onChange={() => {}}
           >
             <option>Regular</option>
             <option>Petulant</option>
@@ -109,7 +106,7 @@ export default function AdminSettingsApp({
           <div className="flex gap-1">
             <input
               type="text"
-              value={userInput}
+              value=""
               placeholder={adminUserData.profile?.displayname}
               className="w95-input"
               style={{ width: '150px' }}
@@ -126,7 +123,7 @@ export default function AdminSettingsApp({
             className="w95-input"
             style={{ width: '200px', marginBottom: '12px' }}
             value={adminUserData.startup}
-            onChange={(e) => {}}
+            onChange={() => {}}
           >
             <option value={1}>Startup_Audio #1.wav</option>
             <option value={2}>Startup_Audio #2.wav</option>
