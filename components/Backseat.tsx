@@ -73,7 +73,7 @@ export default function Backseat() {
     return () => {
       if (timer) clearTimeout(timer);
     };
-  }, [backseat, getRandomMessage]);
+  }, [backseat, getRandomMessage, playMessageWithAudio]);
 
   if (!backseat || !isVisible) {
     return null;

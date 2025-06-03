@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useMemo } from 'react';
 import { ChatMessage } from '@/state/slices/chatSlice';
 import { useAppSelector, useAppDispatch } from '@/state/hooks';
 import {
@@ -44,7 +44,10 @@ export default function Chat() {
     }
   }, [currentSessionId, messages, dispatch]);
 
-  const currentMessages = messages[currentSessionId] || [];
+  const currentMessages = useMemo(
+    () => messages[currentSessionId] || [],
+    [messages, currentSessionId]
+  );
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {

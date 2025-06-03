@@ -19,7 +19,9 @@ export default function VirtualDesktop({
   const [liveUpdates, setLiveUpdates] = useState<Map<string, any>>(new Map());
   const [userChatState, setUserChatState] = useState<ChatState | null>(null);
   const [userState, setUserState] = useState<UserState>();
-
+  const [windowInputs, setWindowInputs] = useState<{
+    [windowId: string]: { x: number; y: number; w: number; h: number };
+  }>({});
   const [controlMin, setControlMin] = useState(false);
 
   const openApps = userDesktopState
