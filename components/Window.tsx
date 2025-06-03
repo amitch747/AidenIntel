@@ -7,7 +7,7 @@ import AdminChatApp from '@/components/apps/Chat/AdminChatApp';
 import SettingsApp from '@/components/apps/Settings/SettingsApp';
 import AdminSettingsApp from './apps/Settings/AdminSettingsApp';
 import { GrClose, GrFormSubtract, GrLayer } from 'react-icons/gr';
-import { useAppDispatch, useAppSelector } from '@/state/hooks';
+import { AppDispatch } from '@/state/store';
 
 import {
   bringToFront,
@@ -17,6 +17,7 @@ import {
   closeWindow,
 } from '@/state/slices/desktopSlice';
 import { UserState } from '@/state/slices/userSlice';
+
 const APP_COMPONENTS = {
   ChatApp,
   SettingsApp,
@@ -27,8 +28,8 @@ const theme = 'w95';
 interface WindowProps extends WindowState {
   adminChatData?: ChatState;
   adminUserData?: UserState;
-
   isAdminView?: boolean;
+  dispatch?: AppDispatch; // Optional dispatch
 }
 
 export default function Window({
@@ -43,31 +44,10 @@ export default function Window({
   adminChatData,
   adminUserData,
   isAdminView = false,
+  dispatch,
 }: WindowProps) {
   // Cool trick to get dynamic access to components
   const AppComponent = APP_COMPONENTS[appName as keyof typeof APP_COMPONENTS];
-  // Always call hooks at top level
-  const user = useAppSelector((state) => state.user);
-  const dispatch = useAppDispatch();
-
-  // const broadcastPosition = (position: {
-  //   x: number;
-  //   y: number;
-  //   w?: number;
-  //   h?: number;
-  // }) => {
-  //   if (profile?.id) {
-  //     supabase.channel(`user-${profile.id}`).send({
-  //       type: 'broadcast',
-  //       event: 'window-live-update',
-  //       payload: {
-  //         windowId: id,
-  //         position,
-  //         timestamp: Date.now(),
-  //       },
-  //     });
-  //   }
-  // };
 
   return (
     <Rnd
@@ -84,22 +64,22 @@ export default function Window({
       minHeight={yM}
       style={{ zIndex: zIndex }}
       onDragStart={() => {
-        if (!isAdminView) {
+        if (!isAdminView && dispatch) {
           dispatch(bringToFront(id));
         }
       }}
       onResizeStart={() => {
-        if (!isAdminView) {
+        if (!isAdminView && dispatch) {
           dispatch(bringToFront(id));
         }
       }}
       onMouseDown={() => {
-        if (!isAdminView) {
+        if (!isAdminView && dispatch) {
           dispatch(bringToFront(id));
         }
       }}
       onDragStop={(e, d) => {
-        if (!isAdminView) {
+        if (!isAdminView && dispatch) {
           dispatch(
             updateWindowBounds({
               id,
@@ -111,28 +91,8 @@ export default function Window({
           );
         }
       }}
-      // onResize={(e, dir, ref, delta, pos) => {
-      //   // Only broadcast if not admin view
-      //   if (!isAdminView) {
-      //     broadcastPosition({
-      //       x: pos.x,
-      //       y: pos.y,
-      //       w: ref.offsetWidth,
-      //       h: ref.offsetHeight,
-      //     });
-      //   }
-      // }}
-      // onDrag={(e, d) => {
-      //   // Only broadcast if not admin view
-      //   if (!isAdminView) {
-      //     broadcastPosition({
-      //       x: d.x,
-      //       y: d.y,
-      //     });
-      //   }
-      // }}
       onResizeStop={(e, dir, ref, delta, pos) => {
-        if (!isAdminView) {
+        if (!isAdminView && dispatch) {
           dispatch(
             updateWindowBounds({
               id,
@@ -156,7 +116,7 @@ export default function Window({
           <button
             className={`${theme}-minimize`}
             onClick={() => {
-              if (!isAdminView) {
+              if (!isAdminView && dispatch) {
                 dispatch(toggleView(id));
               }
             }}
@@ -167,7 +127,7 @@ export default function Window({
           <button
             className={`${theme}-maximize`}
             onClick={() => {
-              if (!isAdminView) {
+              if (!isAdminView && dispatch) {
                 dispatch(toggleMax(id));
               }
             }}
@@ -178,7 +138,7 @@ export default function Window({
           <button
             className={`w95-close`}
             onClick={() => {
-              if (!isAdminView) {
+              if (!isAdminView && dispatch) {
                 dispatch(closeWindow(id));
               }
             }}
@@ -189,7 +149,7 @@ export default function Window({
         </div>
       </div>
 
-      {/* Admin version rendered if adminvi */}
+      {/* Admin version rendered if adminView */}
       {appName === 'ChatApp' ? (
         isAdminView && adminChatData ? (
           <AdminChatApp userChatState={adminChatData} />

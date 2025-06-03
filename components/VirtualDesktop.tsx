@@ -16,27 +16,13 @@ export default function VirtualDesktop({
   onBack,
 }: VirtualDesktopProps) {
   const [userDesktopState, setUserDesktopState] = useState<WindowState[]>([]);
-  const [liveUpdates, setLiveUpdates] = useState<Map<string, any>>(new Map());
+
   const [userChatState, setUserChatState] = useState<ChatState | null>(null);
   const [userState, setUserState] = useState<UserState>();
 
   const [controlMin, setControlMin] = useState(false);
 
-  const openApps = userDesktopState
-    .filter((app) => app.isOpen)
-    .map((app) => {
-      const liveUpdate = liveUpdates.get(app.id);
-      if (liveUpdate) {
-        return {
-          ...app,
-          position: {
-            ...app.position,
-            ...liveUpdate.position,
-          },
-        };
-      }
-      return app;
-    });
+  const openApps = userDesktopState.filter((app) => app.isOpen);
 
   return (
     <div>
@@ -52,7 +38,6 @@ export default function VirtualDesktop({
           setUserDesktopState={setUserDesktopState}
           setUserChatState={setUserChatState}
           setUserState={setUserState}
-          setLiveUpdates={setLiveUpdates}
           userId={userId}
         />
         {/* USER WINDOWS */}

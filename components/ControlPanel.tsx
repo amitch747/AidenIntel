@@ -17,7 +17,6 @@ export default function ControlPanel({
   setUserDesktopState,
   setUserChatState,
   setUserState,
-  setLiveUpdates,
   userId,
 }: {
   chatState: ChatState | null;
@@ -28,7 +27,6 @@ export default function ControlPanel({
   setUserDesktopState: Dispatch<SetStateAction<WindowState[]>>;
   setUserChatState: Dispatch<SetStateAction<ChatState | null>>;
   setUserState: Dispatch<SetStateAction<UserState | undefined>>;
-  setLiveUpdates: Dispatch<SetStateAction<Map<string, any>>>;
   userId: string;
 }) {
   const title = 'Control';
@@ -47,11 +45,7 @@ export default function ControlPanel({
         setUserChatState(payload.payload.chat || null);
         setUserState(payload.payload.user);
       })
-      .on('broadcast', { event: 'window-live-update' }, (payload) => {
-        setLiveUpdates(
-          (prev) => new Map(prev.set(payload.payload.windowId, payload.payload))
-        );
-      })
+
       // Send request once when we mount
       .subscribe(async (status) => {
         if (status === 'SUBSCRIBED') {
@@ -65,10 +59,10 @@ export default function ControlPanel({
     return () => {
       userChannel.unsubscribe();
     };
-  }, [userId]);
+  }, [userId, setUserDesktopState, setUserChatState, setUserState]);
 
   // Admin control functions
-  const sendControlCommand = async (command: string, payload: any) => {
+  const sendControlCommand = async (command: string, payload: object) => {
     const userChannel = supabase.channel(`user-${userId}`);
     await userChannel.send({
       type: 'broadcast',

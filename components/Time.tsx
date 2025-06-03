@@ -35,7 +35,7 @@ export default function MountainClock() {
 
     // tidy up if component unmounts before first tick
     return () => clearTimeout(firstTimeout);
-  }, [fmt]);
+  }, []);
 
   return <div>{time}</div>;
 }

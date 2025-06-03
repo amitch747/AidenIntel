@@ -3,6 +3,7 @@
 import TaskBar from '@/components/Taskbar';
 import { useAppSelector, useAppDispatch } from '@/state/hooks';
 import Window from './Window';
+
 import { useEffect } from 'react';
 import {
   changeName,
@@ -302,7 +303,7 @@ export default function Desktop({ profile }: { profile: Profile }) {
         )}
 
         {openApps.map((app) => (
-          <Window key={app.id} {...app} />
+          <Window key={app.id} {...app} dispatch={dispatch} />
         ))}
       </main>
       <Backseat />
