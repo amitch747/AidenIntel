@@ -34,7 +34,7 @@ export default function StartupScreen({ onDone }: { onDone: () => void }) {
       audio.pause();
       audio.removeEventListener('ended', () => {});
     };
-  }, [bootStarted]);
+  }, [bootStarted, user.startup]);
 
   return (
     <AnimatePresence>

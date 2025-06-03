@@ -8,7 +8,6 @@ import SettingsApp from '@/components/apps/Settings/SettingsApp';
 import AdminSettingsApp from './apps/Settings/AdminSettingsApp';
 import { GrClose, GrFormSubtract, GrLayer } from 'react-icons/gr';
 import { useAppDispatch, useAppSelector } from '@/state/hooks';
-import { supabase } from '@/utils/supabase/client';
 
 import {
   bringToFront,
@@ -47,10 +46,9 @@ export default function Window({
 }: WindowProps) {
   // Cool trick to get dynamic access to components
   const AppComponent = APP_COMPONENTS[appName as keyof typeof APP_COMPONENTS];
-  // Only use Redux hooks if NOT in admin view
-  const user = isAdminView ? null : useAppSelector((state) => state.user);
-  const profile = user?.profile;
-  const dispatch = isAdminView ? null : useAppDispatch();
+  // Always call hooks at top level
+  const user = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
 
   // const broadcastPosition = (position: {
   //   x: number;
@@ -86,22 +84,22 @@ export default function Window({
       minHeight={yM}
       style={{ zIndex: zIndex }}
       onDragStart={() => {
-        if (!isAdminView && dispatch) {
+        if (!isAdminView) {
           dispatch(bringToFront(id));
         }
       }}
       onResizeStart={() => {
-        if (!isAdminView && dispatch) {
+        if (!isAdminView) {
           dispatch(bringToFront(id));
         }
       }}
       onMouseDown={() => {
-        if (!isAdminView && dispatch) {
+        if (!isAdminView) {
           dispatch(bringToFront(id));
         }
       }}
       onDragStop={(e, d) => {
-        if (!isAdminView && dispatch) {
+        if (!isAdminView) {
           dispatch(
             updateWindowBounds({
               id,
@@ -134,7 +132,7 @@ export default function Window({
       //   }
       // }}
       onResizeStop={(e, dir, ref, delta, pos) => {
-        if (!isAdminView && dispatch) {
+        if (!isAdminView) {
           dispatch(
             updateWindowBounds({
               id,
@@ -158,7 +156,7 @@ export default function Window({
           <button
             className={`${theme}-minimize`}
             onClick={() => {
-              if (!isAdminView && dispatch) {
+              if (!isAdminView) {
                 dispatch(toggleView(id));
               }
             }}
@@ -169,7 +167,7 @@ export default function Window({
           <button
             className={`${theme}-maximize`}
             onClick={() => {
-              if (!isAdminView && dispatch) {
+              if (!isAdminView) {
                 dispatch(toggleMax(id));
               }
             }}
@@ -180,7 +178,7 @@ export default function Window({
           <button
             className={`w95-close`}
             onClick={() => {
-              if (!isAdminView && dispatch) {
+              if (!isAdminView) {
                 dispatch(closeWindow(id));
               }
             }}
