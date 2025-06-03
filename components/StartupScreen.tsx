@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useAppSelector } from '@/state/hooks';
 
 export default function StartupScreen({ onDone }: { onDone: () => void }) {
   const [bootStarted, setBootStarted] = useState(false); // after first gesture
   const [hide, setHide] = useState(false); // start fade‑out
+  const user = useAppSelector((state) => state.user);
 
-  /* 1️⃣  Wait for the first key/click to start the boot sequence */
   useEffect(() => {
     const startBoot = () => {
       setBootStarted(true);
@@ -22,11 +23,10 @@ export default function StartupScreen({ onDone }: { onDone: () => void }) {
     };
   }, []);
 
-  /* 2️⃣  When boot starts, play jingle; fade out when it ends */
   useEffect(() => {
     if (!bootStarted) return;
 
-    const audio = new Audio('/sounds/startup_1.ogg');
+    const audio = new Audio(`/sounds/startup_${user.startup}.ogg`);
     audio.play().catch(() => {}); // gesture already happened
     audio.addEventListener('ended', () => setHide(true));
 
@@ -69,7 +69,7 @@ export default function StartupScreen({ onDone }: { onDone: () => void }) {
               <motion.span
                 initial={{ opacity: 0, x: -50 }}
                 animate={{ opacity: 1, x: -150 }}
-                transition={{ duration: 2.8, delay: 0.7 }}
+                transition={{ duration: 1.3, delay: 2 }}
                 className="text-5xl whitespace-nowrap"
                 style={{
                   imageRendering: 'pixelated',

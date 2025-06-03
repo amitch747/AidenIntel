@@ -28,7 +28,7 @@ export default function Taskbar() {
           className="w95-button-logo p-1 w-[40px] h-[29px] flex items-center justify-center "
           onClick={toggleStart}
         >
-          <Image src="/bogo.png" alt="logo" width={100} height={90} />
+          <Image src="/vogo.png" alt="logo" width={100} height={90} />
         </button>
         {showStart && <ToolTipStart setShowStart={setShowStart} />}
       </div>
@@ -53,8 +53,8 @@ export default function Taskbar() {
         ))}
       </div>
 
-      <div className={`flex-none ${user.time ? 'w95-time' : ''}`}>
-        {user.time ? <Time /> : <></>}
+      <div className={`w-15 ${user.time ? 'w95-time' : ''}`}>
+        {user.time ? <Time /> : <div></div>}
       </div>
     </div>
   );

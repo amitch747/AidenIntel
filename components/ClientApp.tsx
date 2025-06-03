@@ -43,8 +43,8 @@ export default function ClientApp({ profile }: { profile: Profile }) {
 
   return (
     <>
-      {showStartup && <StartupScreen onDone={() => setShowStartup(false)} />}
       <Provider store={store}>
+        {showStartup && <StartupScreen onDone={() => setShowStartup(false)} />}
         <PersistGate loading={null} persistor={persistor}>
           <Desktop profile={profile} />
         </PersistGate>

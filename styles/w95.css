@@ -277,3 +277,25 @@
     height: 16px;
   }
 }
+
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+.backseat-wow {
+  width: 128px;
+  height: 128px;
+  background-image: url('/wow3.png');
+  background-repeat: no-repeat;
+  animation: clippy-wave 5s steps(3) infinite;
+  padding-left: 0px;
+}
+
+@keyframes clippy-wave {
+  0% {
+    background-position: 0px 0px;
+  }
+  100% {
+    background-position: -384px 0px;
+  }
+}

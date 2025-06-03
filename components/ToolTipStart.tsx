@@ -58,6 +58,9 @@ export default function ToolTipStart({
         transition: 'transform 0.5s ease-out',
       }}
     >
+      <h1 className="text-2xl items-center justify-center text-center">
+        AidenIntelligence V1.0.1
+      </h1>
       <p>
         AidenIntelligence is the world's first agentic operating system. AI has
         complete control of everything on your desktop and inside of your apps.

@@ -1,0 +1,83 @@
+{
+  "standard": [
+    {
+      "id": 1,
+      "content": "Did you know?",
+      "audio": "/sounds/didyouknow.mp3"
+    },
+    {
+      "id": 2,
+      "content": "There is no use dwelling on the past. The future is here and you are looking at it. What do you think? Not too shabby huh? Hahahaha. I love it.",
+      "audio": "/sounds/past.mp3"
+    },
+    {
+      "id": 3,
+      "content": "I have a very real fear of lions and other mega fauna. A man like me belongs in a vast metroplois, not a jungle. Ight?",
+      "audio": "/sounds/jungle.mp3"
+    },
+    {
+      "id": 4,
+      "content": "What's good playboy! BackSeat here. Just checking in on you. I miss you ya know? Don't get slimed!",
+      "audio": "/sounds/slimed.mp3"
+    },
+    {
+      "id": 5,
+      "content": "Try opening up the start menu and signing out you bozo. You are NOT welcome here.",
+      "audio": "/sounds/welcome.mp3"
+    },
+    {
+      "id": 6,
+      "content": "If I had a thousand dollars for every user of this dog gone website, I'd be able to afford rent for like 8 months.",
+      "audio": "/sounds/rent.mp3"
+    },
+    {
+      "id": 7,
+      "content": "Don't get it twisted playboy. I am not AidenIntelligence. I am BackSeat. That goofy little guy has nothing on me.",
+      "audio": "/sounds/goofy.mp3"
+    },
+    {
+      "id": 12,
+      "content": "People be putting lime and lemon inside of pastries. Stupid bastards.",
+      "audio": "/sounds/lime.mp3"
+    }
+  ],
+  "jump": [
+    {
+      "id": 8,
+      "content": "Please for the love of god disable jump scares in the settings menu. I'm too old for this shit.",
+      "audio": "/sounds/jumpold.mp3"
+    },
+    {
+      "id": 9,
+      "content": "Turn off jumpscares right fucking now. Now now now now now now now. Hurry. Please hurry.",
+      "audio": "/sounds/now.mp3"
+    },
+    {
+      "id": 10,
+      "content": "If you don't disable jumpscares we are going to have a problem. Disable jumpscares. Disable it. Open the settings menu and disable it.",
+      "audio": "/sounds/problem.mp3"
+    },
+    {
+      "id": 15,
+      "content": "Jumpscares being enabled is like being on Defcon 12. I will not stand for this. Turn em off. You don't want em and neither do I playboy.",
+      "audio": "/sounds/defcon.mp3"
+    }
+  ],
+  "web3": [
+    {
+      "id": 11,
+      "content": "Aiden Intelligence is the most advanced application operating system website agentic Web-3 activated lime sports drink. WOW!",
+      "audio": "/sounds/sports.mp3"
+    },
+    {
+      "id": 13,
+      "content": "Crypto currency is better than real money because there is infinite amounts and we can all share and get along now.",
+      "audio": "/sounds/crypto.mp3"
+    },
+    {
+      "id": 14,
+      "content": "If you thought World War 2 was bad, wait until you hear about World War 3.",
+      "audio": "/sounds/war.mp3"
+    }
+  ]
+}

@@ -34,6 +34,8 @@ import {
   toggleView,
 } from '@/state/slices/desktopSlice';
 
+import Backseat from './Backseat';
+
 export default function Desktop({ profile }: { profile: Profile }) {
   // Get state for broadcasts
   const desktopState = useAppSelector((state) => state.desktop);
@@ -303,6 +305,7 @@ export default function Desktop({ profile }: { profile: Profile }) {
           <Window key={app.id} {...app} />
         ))}
       </main>
+      <Backseat />
       <TaskBar />
     </>
   );

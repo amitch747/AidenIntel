@@ -3,11 +3,9 @@ import { useAppSelector, useAppDispatch } from '@/state/hooks';
 
 import {
   setProfile,
-  toggleCursor,
   toggleBackseat,
   toggleFoul,
   toggleJump,
-  togglePrivacy,
   toggleTime,
   toggleVoice,
   toggleWeb3,
@@ -17,8 +15,8 @@ import {
 } from '@/state/slices/userSlice';
 
 import { changeName } from '@/state/slices/userSlice';
+import Image from 'next/image';
 import { useState } from 'react';
-import { GrClose, GrLayer } from 'react-icons/gr';
 export default function SettingsApp() {
   const [userInput, setUserInput] = useState<string>('');
 
@@ -45,43 +43,46 @@ export default function SettingsApp() {
       <div className="settings-section">
         <h3>Operating System Configuration:</h3>
         <div className="settings-listbox">
-          <button
+          {/* <button
             className={`settings-listbox-item ${
               userState.coolCursor ? 'selected' : ''
             }`}
             onClick={() => dispatch(toggleCursor(!userState.coolCursor))}
           >
             <GrClose />
-            {/* ENABLE Cursor */}
+            ENABLE Cursor
             Cool Cursor
-          </button>
+          </button> */}
+
           <button
             className={`settings-listbox-item ${
-              userState.backseat ? 'selected' : ''
+              userState.time ? 'selected' : ''
             }`}
-            onClick={() => dispatch(toggleBackseat(!userState.backseat))}
+            onClick={() => dispatch(toggleTime(!userState.time))}
           >
-            <GrClose />
-            {/* ENABLE Backseat */}
-            BackSeat
+            <Image
+              src={'/mountain.png'}
+              alt="backseat"
+              width={32}
+              height={32}
+              className="pixelated"
+            />
+            {/* RENDER Clock */}
+            Mountain Time
           </button>
           <button
-            className={`settings-listbox-item ${
+            className={` settings-listbox-item ${
               userState.privacy ? 'selected' : ''
             }`}
           >
-            <GrClose />
+            <Image
+              src={'/key.png'}
+              alt="backseat"
+              width={32}
+              height={32}
+              className="pixelated content-center justify-center"
+            />
             Privacy & Security
-          </button>
-          <button
-            className={`settings-listbox-item ${
-              userState.voice ? 'selected' : ''
-            }`}
-            onClick={() => dispatch(toggleVoice(!userState.voice))}
-          >
-            <GrClose />
-            {/* ENABLE Voice */}
-            The Voice
           </button>
           <button
             className={`settings-listbox-item ${
@@ -89,7 +90,13 @@ export default function SettingsApp() {
             }`}
             onClick={() => dispatch(toggleWeb3(!userState.web3))}
           >
-            <GrClose />
+            <Image
+              src={'/3.png'}
+              alt="backseat"
+              width={32}
+              height={32}
+              className="pixelated"
+            />
             Web3
           </button>
           <button
@@ -98,18 +105,63 @@ export default function SettingsApp() {
             }`}
             onClick={() => dispatch(toggleWindow(!userState.window))}
           >
-            <GrClose />
+            <Image
+              src={'/brain.png'}
+              alt="backseat"
+              width={32}
+              height={32}
+              className="pixelated"
+            />
             Intelligent Windows
+          </button>
+
+          <button
+            className={`settings-listbox-item ${
+              userState.voice ? 'selected' : ''
+            }`}
+            onClick={() => dispatch(toggleVoice(!userState.voice))}
+          >
+            <Image
+              src={'/voice.png'}
+              alt="backseat"
+              width={32}
+              height={32}
+              className="pixelated content-center justify-center"
+            />
+            {/* ENABLE Voice */}
+            The Voice
           </button>
           <button
             className={`settings-listbox-item ${
-              userState.time ? 'selected' : ''
+              userState.backseat ? 'selected' : ''
             }`}
-            onClick={() => dispatch(toggleTime(!userState.time))}
+            onClick={() => dispatch(toggleBackseat(!userState.backseat))}
           >
-            <GrClose />
-            {/* RENDER Clock */}
-            Mountain Time
+            <Image
+              src={'/backseat.png'}
+              alt="backseat"
+              width={32}
+              height={32}
+              className="pixelated"
+            />
+            {/* ENABLE Backseat */}
+            BackSeat
+          </button>
+          <button
+            className={`settings-listbox-item ${
+              userState.jump ? 'selected' : ''
+            }`}
+            onClick={() => dispatch(toggleJump(!userState.jump))}
+          >
+            <Image
+              src={'/speed.png'}
+              alt="jump"
+              width={32}
+              height={32}
+              className="pixelated"
+            />
+            {/* ENABLE Backseat */}
+            JumpScares
           </button>
         </div>
       </div>
@@ -135,12 +187,12 @@ export default function SettingsApp() {
           </select>
         </div>
         <div className="flex-1">
-          <h3>AI Voice:</h3>
+          <h3>BackSeat Voice:</h3>
           <select
             className="w95-input"
             style={{ width: '200px', marginBottom: '12px' }}
           >
-            <option>Aiden</option>
+            <option>Default</option>
           </select>
         </div>
       </div>
