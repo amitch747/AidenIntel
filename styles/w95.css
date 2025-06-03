@@ -1,6 +1,7 @@
 :root {
   --greyMain: #808080;
   --greyLight: #c0c0c0;
+  --grey1: #999999;
   --black: #04040f;
   --white: #ffffff;
   --blue: #000082;
@@ -193,7 +194,7 @@
   gap: 6px;
   padding: 2px 8px;
   font-size: 13px;
-  background: var(--greyLight);
+  background: var(--grey1);
   color: var(--black);
   box-shadow: inset 1px 1px 1 #ffffff, inset -1px -1px 1 #000000;
   cursor: pointer;
