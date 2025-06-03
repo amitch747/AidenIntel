@@ -193,7 +193,7 @@
   gap: 6px;
   padding: 2px 8px;
   font-size: 13px;
-  background: var(--greyMain);
+  background: var(--greyLight);
   color: var(--black);
   box-shadow: inset 1px 1px 1 #ffffff, inset -1px -1px 1 #000000;
   cursor: pointer;
