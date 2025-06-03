@@ -19,7 +19,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--grey1);
+  background: var(--greyMain);
   border: 2px solid #c0c0c0;
   box-shadow: inset -1px -1px 0 #000, inset 1px 1px 0 #fff;
 }
@@ -193,7 +193,7 @@
   gap: 6px;
   padding: 2px 8px;
   font-size: 13px;
-  background: var(--grey1);
+  background: var(--greyMain);
   color: var(--black);
   box-shadow: inset 1px 1px 1 #ffffff, inset -1px -1px 1 #000000;
   cursor: pointer;
@@ -206,7 +206,7 @@
 .w95-button.active {
   background: var(--blue);
   color: var(--white);
-  border: 1px inset var(--grey1);
+  border: 1px inset var(--greyMain);
 }
 .w95-button.minimized {
   background: #c0c0c0;
