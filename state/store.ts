@@ -1,19 +1,60 @@
-import { configureStore } from '@reduxjs/toolkit';
+// state/store.ts
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import desktopReducer from '@/state/slices/desktopSlice';
 import userReducer from '@/state/slices/userSlice';
 import chatReducer from '@/state/slices/chatSlice';
 
-export const store = configureStore({
-  reducer: {
-    desktop: desktopReducer,
-    user: userReducer,
-    chat: chatReducer,
-  },
+import storage from 'redux-persist/lib/storage';
+import {
+  persistReducer,
+  persistStore,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
+
+/* 👇 keep only the lightweight prefs */
+const userPersistConfig = {
+  key: 'userPrefs',
+  storage,
+  whitelist: [
+    'coolCursor',
+    'privacy',
+    'jump',
+    'voice',
+    'web3',
+    'foul',
+    'window',
+    'backseat',
+    'time',
+    'personality',
+    'startup',
+  ],
+};
+
+const rootReducer = combineReducers({
+  desktop: desktopReducer,
+  user: persistReducer(userPersistConfig, userReducer),
+  chat: chatReducer,
 });
 
-// Infer the type of `store`
+/* 🛠  serialisable‑check must ignore redux‑persist actions */
+export const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefault) =>
+    getDefault({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
+
+export const persistor = persistStore(store);
+
+/* ——— types ——— */
 export type AppStore = typeof store;
-// Infer the `AppDispatch` type from the store itself
 export type AppDispatch = typeof store.dispatch;
-// Same for the `RootState` type
 export type RootState = ReturnType<typeof store.getState>;

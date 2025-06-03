@@ -5,6 +5,9 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Provider } from '@supabase/supabase-js';
 import { FaGithub, FaDiscord } from 'react-icons/fa';
+import { Rnd } from 'react-rnd';
+import { useState } from 'react';
+import { GrLanguage } from 'react-icons/gr';
 
 const providers: {
   id: Provider;
@@ -17,6 +20,8 @@ const providers: {
 
 export default function LoginPage() {
   // Send user back home if logged in
+  const [position, setPosition] = useState({ x: 200, y: 100 });
+  const [size, setSize] = useState({ width: 300, height: 130 });
   const router = useRouter();
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -43,17 +48,38 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="grid place-items-center min-h-screen bg-[#00808066]">
-      <div className="w95-window shadow-lg px-8 py-6" style={{ width: 280 }}>
-        <h1 className="text-center mb-4 text-lg">AidenIntelligence</h1>
+    <main className="w95-login">
+      <Rnd
+        minWidth={220}
+        minHeight={100}
+        className="w95-window"
+        bounds="parent"
+        dragHandleClassName={`w95-titlebar`}
+        position={position}
+        size={size}
+        onDragStop={(e, d) => {
+          setPosition({ x: d.x, y: d.y });
+        }}
+        enableResizing={false}
+      >
+        <div className="w95-titlebar">
+          <span>Welcome to AidenIntelligence</span>
+        </div>
 
-        {providers.map(({ id, label, Icon }) => (
-          <button key={id} onClick={() => signIn(id)} className="w95-button">
-            <Icon size={16} />
-            Log in with {label}
-          </button>
-        ))}
-      </div>
+        <p className="text-sm ml-2">Please Login Now</p>
+        <div className="flex flex-col justify-center items-center p-4">
+          {providers.map(({ id, label, Icon }) => (
+            <button
+              key={id}
+              onClick={() => signIn(id)}
+              className="w95-button mb-2 w-[150px]"
+            >
+              <Icon size={16} />
+              Login with {label}
+            </button>
+          ))}
+        </div>
+      </Rnd>
     </main>
   );
 }

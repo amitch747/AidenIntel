@@ -1,14 +1,18 @@
 'use client';
 
-import { Provider } from 'react-redux';
-import { store } from '@/state/store';
 import Desktop from '@/components/Desktop';
 import AdminCenter from './AdminCenter';
 import { supabase } from '@/utils/supabase/client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { UUID } from 'crypto';
 import { useAppSelector, useAppDispatch } from '@/state/hooks';
 import { toggleAdmin } from '@/state/slices/userSlice';
+import StartupScreen from '@/components/StartupScreen';
+
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { store, persistor } from '@/state/store';
+
 export type Profile = {
   id: UUID;
   is_admin: boolean;
@@ -19,6 +23,8 @@ export type Profile = {
 
 // https://supabase.com/docs/guides/realtime/presence?queryGroups=language&language=js
 export default function ClientApp({ profile }: { profile: Profile }) {
+  const [showStartup, setShowStartup] = useState(true); // <‑‑ new
+
   // Updating last oneline
   useEffect(() => {
     const updateLastOnline = async () => {
@@ -37,13 +43,12 @@ export default function ClientApp({ profile }: { profile: Profile }) {
 
   return (
     <>
-      {profile.is_admin ? (
-        <AdminCenter profile={profile} />
-      ) : (
-        <Provider store={store}>
+      {showStartup && <StartupScreen onDone={() => setShowStartup(false)} />}
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
           <Desktop profile={profile} />
-        </Provider>
-      )}
+        </PersistGate>
+      </Provider>
     </>
   );
 }

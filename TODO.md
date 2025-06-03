@@ -1,7 +1,7 @@
 # TODO
 
-- Pixel art pass (Backseat, settings icons, app icons, main logo, cursors)
-- Start menu and startup screen pass. Also login screen (add more oauth). Also add desktop icons
-- Admin settings control
+- Pixel art
+- Desktop icons
+- Login animation page
 
-- Voice pass. Clone my voice, and get a bunch of files to be used by backseat
+- Fix vercel shit

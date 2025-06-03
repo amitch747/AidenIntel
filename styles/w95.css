@@ -93,6 +93,14 @@
   overflow: hidden; /* Add this line to prevent scrolling */
 }
 
+.w95-login {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: var(--black);
+  overflow: hidden; /* Add this line to prevent scrolling */
+}
+
 .w95-window {
   position: absolute;
   background: #c0c0c0;
@@ -131,8 +139,23 @@
   justify-content: center;
   margin-left: 8px;
 }
+
+.w95-world {
+  width: 16px;
+  height: 16px;
+  background: #c0c0c0;
+  color: var(--black);
+  font-size: 12px;
+  box-shadow: inset -1px -1px 0 #000000, inset 1px 1px 0 #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+}
+
 .w95-close:active,
 .w95-maximize:active,
+.w95-world:active,
 .w95-minimize:active {
   box-shadow: inset 1px 1px 0 #404040, inset -1px -1px 0 #fff;
 }
@@ -152,6 +175,16 @@
   align-items: center;
   z-index: 9995;
   font-family: var(--font-w95), sans-serif;
+}
+
+.w95-button-logo {
+  display: flex;
+  box-shadow: inset 1px 1px 1 #ffffff, inset -1px -1px 1 #000000;
+  cursor: pointer;
+  transition: background 0.1s ease;
+}
+.w95-button-logo:hover {
+  background: #dcdcdc;
 }
 
 .w95-button {
@@ -219,7 +252,7 @@
   border: 2px inset #c0c0c0;
   padding: 4px 8px;
   font-size: 12px;
-  z-index: 9909;
+  z-index: 1;
 }
 
 .ai-status-light {

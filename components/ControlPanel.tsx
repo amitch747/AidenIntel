@@ -119,6 +119,32 @@ export default function ControlPanel({
     },
   };
 
+  const controlUser = {
+    renameUser: (input: string) => {
+      console.log('rename');
+      sendControlCommand('RENAME_USER', { userId, input });
+    },
+    toggleCursor: (toggle: boolean) => {
+      console.log(toggle);
+      sendControlCommand('CURSOR', { toggle });
+    },
+    toggleBack: (toggle: boolean) => {
+      sendControlCommand('BACK', { toggle });
+    },
+    toggleVoice: (toggle: boolean) => {
+      sendControlCommand('VOICE', { toggle });
+    },
+    toggleWeb3: (toggle: boolean) => {
+      sendControlCommand('WEB3', { toggle });
+    },
+    toggleWindow: (toggle: boolean) => {
+      sendControlCommand('WINDOW', { toggle });
+    },
+    toggleTime: (toggle: boolean) => {
+      sendControlCommand('TIME', { toggle });
+    },
+  };
+
   const controlUserWindows = {
     openApp: (windowId: string) => {
       sendControlCommand('OPEN_APP', { windowId });
@@ -284,7 +310,7 @@ export default function ControlPanel({
                 type="text"
                 value={adminMessageInput}
                 onChange={(e) => setAdminMessageInput(e.target.value)}
-                placeholder="What's up stupid do u think ur better than me"
+                placeholder="What's up stupid do u think ur better than me?"
                 className="w95-input flex-1"
                 style={{ fontSize: '11px' }}
                 onKeyDown={(e) => {
@@ -336,6 +362,88 @@ export default function ControlPanel({
             </div>
           </div>
 
+          {/* SETTINGS Controls */}
+          <div style={{ marginBottom: '15px' }}>
+            <div
+              style={{
+                fontWeight: 'bold',
+                marginBottom: '5px',
+                fontSize: '12px',
+              }}
+            >
+              Settings Control
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'row', gap: '5px' }}>
+              <button
+                onClick={() => {
+                  if (adminMessageInput.trim()) {
+                    controlUser.renameUser(adminMessageInput);
+                    setAdminMessageInput('');
+                  }
+                }}
+                className="w95-button"
+                style={{ fontSize: '11px' }}
+                disabled={!adminMessageInput.trim()}
+              >
+                Rename
+              </button>
+              <button
+                onClick={() => {
+                  controlUser.toggleCursor(!userState?.coolCursor);
+                }}
+                className="w95-button"
+                style={{ fontSize: '11px' }}
+              >
+                {userState?.coolCursor ? 'No Cursor' : 'Cursor'}
+              </button>
+              <button
+                onClick={() => {
+                  controlUser.toggleBack(!userState?.backseat);
+                }}
+                className="w95-button"
+                style={{ fontSize: '11px' }}
+              >
+                {userState?.backseat ? 'No Back' : 'Backseat'}
+              </button>
+              <button
+                onClick={() => {
+                  controlUser.toggleVoice(!userState?.voice);
+                }}
+                className="w95-button"
+                style={{ fontSize: '11px' }}
+              >
+                {userState?.voice ? 'No voice' : 'Voice'}
+              </button>
+              <button
+                onClick={() => {
+                  controlUser.toggleWeb3(!userState?.web3);
+                }}
+                className="w95-button"
+                style={{ fontSize: '11px' }}
+              >
+                {userState?.web3 ? 'No web3' : 'Web3'}
+              </button>
+              <button
+                onClick={() => {
+                  controlUser.toggleWindow(!userState?.window);
+                }}
+                className="w95-button"
+                style={{ fontSize: '11px' }}
+              >
+                {userState?.coolCursor ? 'No Window' : 'Window'}
+              </button>
+              <button
+                onClick={() => {
+                  controlUser.toggleTime(!userState?.time);
+                }}
+                className="w95-button"
+                style={{ fontSize: '11px' }}
+              >
+                {userState?.time ? 'No Time' : 'Time'}
+              </button>
+            </div>
+          </div>
+
           {/* Window Positioning Controls */}
           <div style={{ marginBottom: '15px' }}>
             <div
@@ -355,9 +463,8 @@ export default function ControlPanel({
                   style={{
                     marginBottom: '8px',
                     padding: '4px',
-                    border: '1px solid #999',
-                    backgroundColor: '#f0f0f0',
                   }}
+                  className="flex-row"
                 >
                   <div
                     style={{
@@ -368,15 +475,7 @@ export default function ControlPanel({
                   >
                     {window.title}
                   </div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      gap: '4px',
-                      flexWrap: 'wrap',
-                      marginBottom: '4px',
-                    }}
-                  ></div>
-                  {/* Preset positioning buttons */}
+
                   <div
                     style={{ display: 'flex', gap: '2px', marginTop: '4px' }}
                   >

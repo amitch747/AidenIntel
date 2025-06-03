@@ -4,7 +4,17 @@ import TaskBar from '@/components/Taskbar';
 import { useAppSelector, useAppDispatch } from '@/state/hooks';
 import Window from './Window';
 import { useEffect } from 'react';
-import { setProfile, toggleAdmin } from '@/state/slices/userSlice';
+import {
+  changeName,
+  setProfile,
+  toggleAdmin,
+  toggleBackseat,
+  toggleCursor,
+  toggleTime,
+  toggleVoice,
+  toggleWeb3,
+  toggleWindow,
+} from '@/state/slices/userSlice';
 import { supabase } from '@/utils/supabase/client';
 import { Profile } from './ClientApp';
 import {
@@ -204,6 +214,42 @@ export default function Desktop({ profile }: { profile: Profile }) {
             break;
           case 'MAX_APP':
             dispatch(toggleMax(data.windowId));
+            break;
+
+          case 'RENAME_USER': {
+            const { userId, input } = data;
+            if (!input?.trim()) break;
+
+            try {
+              await dispatch(
+                changeName({
+                  id: userId,
+                  displayname: input.trim(),
+                })
+              ).unwrap(); // optional but lets you catch errors
+            } catch (err) {
+              console.error('Failed to rename user:', err);
+            }
+            break;
+          }
+
+          case 'CURSOR':
+            dispatch(toggleCursor(data.toggle));
+            break;
+          case 'BACK':
+            dispatch(toggleBackseat(data.toggle));
+            break;
+          case 'VOICE':
+            dispatch(toggleVoice(data.toggle));
+            break;
+          case 'WEB3':
+            dispatch(toggleWeb3(data.toggle));
+            break;
+          case 'WINDOW':
+            dispatch(toggleWindow(data.toggle));
+            break;
+          case 'TIME':
+            dispatch(toggleTime(data.toggle));
             break;
         }
       })
