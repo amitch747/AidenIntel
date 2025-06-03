@@ -58,7 +58,7 @@ export default function ToolTipStart({
       }}
     >
       <h1 className="text-2xl items-center justify-center text-center">
-        AidenIntelligence V1.0.1
+        AidenIntelligence V1.0.3
       </h1>
       <p>
         AidenIntelligence is the worlds first agentic operating system. AI has

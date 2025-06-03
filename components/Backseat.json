@@ -78,6 +78,21 @@
       "id": 14,
       "content": "If you thought World War 2 was bad, wait until you hear about World War 3.",
       "audio": "/sounds/war.mp3"
+    },
+    {
+      "id": 16,
+      "content": "You think it's funny to take screenshots of people's NFT's, huh? Property theft is a joke to you? l'll have you know that the blockchain doesn't lie. I own it. Even if you save it, it's my property. You are mad that you don't own the art that I own. Delete that screenshot.",
+      "audio": "/sounds/nft.mp3"
+    },
+    {
+      "id": 17,
+      "content": "Either disable jumpscares in the operating system config sub menu or do a 360 and walk away you bozo. You DO NOT belong here.",
+      "audio": "/sounds/disable.mp3"
+    },
+    {
+      "id": 18,
+      "content": "To everyone who’s freaking out about the economy right now: you still don’t get it. You can use multiple slurp juices on a single ape. So if you have 1 astro ape and 3 slurp juices you can create 3 new apes.",
+      "audio": "/sounds/apes.mp3"
     }
   ]
 }
