@@ -33,11 +33,11 @@ export default function Taskbar() {
         {showStart && <ToolTipStart setShowStart={setShowStart} />}
       </div>
 
-      <div className="flex justify-center flex-1 mx-4 gap-2">
+      <div className="flex justify-center flex-1 gap-2">
         {apps.map(({ id, title, appName, isOpen, isMinimized }) => (
           <button
             key={id}
-            className={`w95-button ${
+            className={`w95-button flex items-center gap-2 ${
               isOpen ? `${!isMinimized ? 'active' : 'minimized'}` : ''
             }`}
             onClick={() => {
@@ -48,7 +48,17 @@ export default function Taskbar() {
               }
             }}
           >
-            {title}
+            {title === 'AidenIntelligence' && (
+              <Image
+                src="/AI2.png"
+                alt="logo"
+                width={16}
+                height={16}
+                className="flex-shrink-0"
+              />
+            )}
+
+            <span>{title}</span>
           </button>
         ))}
       </div>
