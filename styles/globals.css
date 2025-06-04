@@ -38,7 +38,7 @@ body {
 
   border: inset 1px;
 
-  box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #000000;
+  box-shadow: inset -1px -1px 1 #ffffff, inset 1px 1px 1 #000;
 }
 
 .settings-section h3 {

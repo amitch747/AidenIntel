@@ -22,7 +22,7 @@
 ::-webkit-scrollbar-thumb {
   background: var(--greyMain);
   border: 2px solid #c0c0c0;
-  box-shadow: inset -1px -1px 0 #000, inset 1px 1px 0 #fff;
+  box-shadow: inset -1px -1px 1px #000, inset 1px 1px 1px #fff;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -43,7 +43,7 @@
   flex-direction: column;
   height: 100%;
   margin-left: 10px;
-  box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #000000;
+  box-shadow: inset -1px -1px 1px #ffffff, inset 1px 1px 1px #000;
   padding-right: 4px;
   padding-top: 2px;
   border: inset 1px;
@@ -61,7 +61,7 @@
 .session-item {
   cursor: pointer;
   padding: 4px 6px;
-  box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #000000;
+  box-shadow: inset -1px -1px 1px #000000, inset 1px 1px 1px #ffffff;
 
   background: #c0c0c0;
   line-height: 1.2;
@@ -105,7 +105,7 @@
 .w95-window {
   position: absolute;
   background: #c0c0c0;
-  box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #000000;
+  box-shadow: inset -1px -1px 1px #000000, inset 1px 1px 1px #ffffff;
   font-family: var(--font-w95), sans-serif;
   display: flex;
   overflow: hidden;
@@ -134,7 +134,7 @@
   background: #c0c0c0;
   color: var(--black);
   font-size: 10px;
-  box-shadow: inset -1px -1px 0 #000000, inset 1px 1px 0 #ffffff;
+  box-shadow: inset -1px -1px 0px #000000, inset 1px 1px 0px #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -180,7 +180,7 @@
 
 .w95-button-logo {
   display: flex;
-  box-shadow: inset 1px 1px 1 #ffffff, inset -1px -1px 1 #000000;
+  box-shadow: inset 1px 1px 1px #ffffff, inset -1px -1px 1px #000000;
   cursor: pointer;
   transition: background 0.1s ease;
 }
@@ -196,7 +196,7 @@
   font-size: 13px;
   background: var(--grey1);
   color: var(--black);
-  box-shadow: inset 1px 1px 0 #ffffff, inset -1px -1px 0 #000000;
+  box-shadow: inset 1px 1px 1px #ffffff, inset -1px -1px 1px #000000;
   cursor: pointer;
   transition: background 0.1s ease;
   justify-content: center;
