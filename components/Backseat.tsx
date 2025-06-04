@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import messages from './Backseat.json';
 import { TypewriterText } from './TypewriterText';
 import { useAppSelector } from '@/state/hooks';
+import Chat from './apps/Chat/Chat';
 
 export default function Backseat() {
   const { backseat, voice, web3, jump } = useAppSelector((state) => state.user);
