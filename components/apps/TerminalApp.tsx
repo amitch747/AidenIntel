@@ -25,7 +25,7 @@ export default function TerminalApp() {
           {fakeInput}
           <input
             type="text"
-            onKeyDown={(e) => warning()}
+            onKeyDown={() => warning()}
             className="terminal-input flex-1"
             onChange={(e) => console.log(e)}
             value={`C:\\Users\\${userState.profile?.displayname}>  `}
