@@ -8,6 +8,7 @@ import SettingsApp from '@/components/apps/Settings/SettingsApp';
 import AdminSettingsApp from './apps/Settings/AdminSettingsApp';
 import { GrClose, GrFormSubtract, GrLayer } from 'react-icons/gr';
 import { AppDispatch } from '@/state/store';
+import TerminalApp from './apps/TerminalApp';
 
 import {
   bringToFront,
@@ -21,6 +22,7 @@ import { UserState } from '@/state/slices/userSlice';
 const APP_COMPONENTS = {
   ChatApp,
   SettingsApp,
+  TerminalApp,
 };
 
 const theme = 'w95';

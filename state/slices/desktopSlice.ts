@@ -52,6 +52,23 @@ const initialState: WindowState[] = [
     },
     minDim: { xM: 500, yM: 365 },
   },
+  {
+    id: '3',
+    title: 'Terminal',
+
+    appName: 'TerminalApp',
+    zIndex: 0,
+    isOpen: false,
+    isMaximized: false,
+    isMinimized: false,
+    position: {
+      x: getRandomArbitrary(100, 200),
+      y: getRandomArbitrary(100, 200),
+      w: 250,
+      h: 200,
+    },
+    minDim: { xM: 390, yM: 280 },
+  },
 ];
 
 const desktopSlice = createSlice({

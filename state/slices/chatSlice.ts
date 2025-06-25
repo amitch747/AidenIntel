@@ -160,9 +160,12 @@ export const postMessage = createAsyncThunk(
   }: {
     sessionId: string;
     message: string;
-    isAdmin: boolean;
+    isAdmin: boolean; // Database will validate this!
     isHeader?: boolean;
   }) => {
+    // The RLS policy will automatically reject this if:
+    // 1. User tries to set isAdmin: true but isn't actually an admin
+    // 2. User tries to access someone else's session
     const { data: newMessage, error } = await supabase
       .from('chat_messages')
       .insert({
@@ -174,7 +177,7 @@ export const postMessage = createAsyncThunk(
       .select()
       .single();
 
-    if (error) throw error;
+    if (error) throw error; // Will throw if RLS policy blocks the insert
 
     // Update session timestamp
     await supabase

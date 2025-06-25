@@ -94,9 +94,11 @@ export default function AdminCenter({ profile }: { profile: Profile }) {
   }
   return (
     <div className="admin-center">
-      <div>
+      <div className="flex flex-col items-center">
         <h1>Welcome to AdminCenter {profile.displayname}</h1>
-        <LogoutButton />
+        <div className="mt-4">
+          <LogoutButton />
+        </div>
       </div>
       <div>
         <h3>Online Users:</h3>

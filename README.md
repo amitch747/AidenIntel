@@ -1,11 +1,6 @@
 # AidenIntelligence
 
-- This is a resume project
+- Simulated desktop environment with AI integration (I am the AI)
+- Built using TypeScript, NextJS, Redux Tool Kit, RTK Query, and Supabase Realtime
 
-- Built using TypeScript, NextJS, Redux Tool Kit, RTK Query, and Socket.io
-
-- Logo (for project page) is icon on left, on right is chat window:
-- Hello AidenAI
-- Hey
-- Can you help me with my math homework?
-- No
+![alt text](./public/shot.png)

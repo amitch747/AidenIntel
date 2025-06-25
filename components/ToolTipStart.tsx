@@ -45,6 +45,7 @@ export default function ToolTipStart({
         left: '0px',
         zIndex: 9999,
         backgroundColor: '#c0c0c0',
+
         border: '4px outset #c0c0c0',
         padding: '2px',
         minWidth: '150px',
@@ -58,7 +59,7 @@ export default function ToolTipStart({
       }}
     >
       <h1 className="text-2xl items-center justify-center text-center">
-        AidenIntelligence V1.0.3
+        AidenIntelligence V1.0.4
       </h1>
       <p>
         AidenIntelligence is the worlds first agentic operating system. AI has

@@ -116,3 +116,50 @@ body {
 .cool-cursor {
   cursor: crosshair;
 }
+
+.terminal {
+  background: #000000;
+  color: rgb(223, 223, 223);
+  padding: 14px;
+  font-size: 11px;
+  border: inset 1px;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  margin-left: 2px;
+  margin-right: 2px;
+  justify-content: flex-end; /* Change this line */
+}
+
+.terminal-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 30px); /* Subtracting titlebar height */
+  position: relative;
+}
+
+.terminal-input {
+  background: black;
+  font-size: 16px;
+  padding-bottom: 2px;
+  height: 20px; /* Fixed height instead of percentage */
+  border: none;
+  outline: none;
+  width: 100%;
+
+  margin-top: auto; /* This pushes it to the bottom */
+}
+
+.terminal-input-box {
+  background: black;
+  font-size: 14px;
+  padding-bottom: 2px;
+  height: 20px; /* Fixed height instead of percentage */
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
+  margin-top: auto; /* This pushes it to the bottom */
+}
