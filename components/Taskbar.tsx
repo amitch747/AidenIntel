@@ -63,7 +63,7 @@ export default function Taskbar() {
         ))}
       </div>
 
-      <div className={`w-15 ${user.time ? 'w95-time' : ''}`}>
+      <div className="w95-time flex-none min-w-[60px]">
         {user.time ? <Time /> : <div></div>}
       </div>
     </div>
